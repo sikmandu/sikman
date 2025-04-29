@@ -138,7 +138,7 @@ class _IncorrectNoteReviewScreenState extends State<IncorrectNoteReviewScreen> {
 
           // 문제 표시 영역 (Card 사용)
           Card( elevation: 2.0, margin: const EdgeInsets.only(bottom: 8.0), child: Padding( padding: const EdgeInsets.all(16.0), child: Column( crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Text(question.questionText, style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.5)),
+            _buildMixedContent(context, question.questionText, Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.5)),
             if (question.imagePaths?.isNotEmpty ?? false) Padding( padding: const EdgeInsets.only(top: 16.0), child: Column(children: question.imagePaths!.map((path) => Padding(padding: const EdgeInsets.only(bottom: 8.0), child: Image.asset(path))).toList()),),
             if (question.tableData?.isNotEmpty ?? false) Padding(padding: const EdgeInsets.only(top: 16.0), child: _buildDataTable(context, question.tableData!)), // context 전달
           ],),),),
@@ -148,7 +148,7 @@ class _IncorrectNoteReviewScreenState extends State<IncorrectNoteReviewScreen> {
             const Divider(height: 32.0, thickness: 1.0, indent: 8.0, endIndent: 8.0),
             ...question.subQuestions.map((sub) {
               return Card( elevation: 1.0, margin: const EdgeInsets.only(top: 16.0, left: 12.0, right: 12.0), child: Padding( padding: const EdgeInsets.all(16.0), child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('${sub.subNumber} ${sub.questionText}', style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.4)),
+                _buildMixedContent(context, '${sub.subNumber} ${sub.questionText}', Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.4)),
                 const SizedBox(height: 8.0),
                 if (sub.imagePaths?.isNotEmpty ?? false) Padding( padding: const EdgeInsets.only(top: 8.0), child: Column(children: sub.imagePaths!.map((path) => Padding(padding: const EdgeInsets.only(bottom: 8.0), child: Image.asset(path))).toList()),),
                 if (sub.tableData?.isNotEmpty ?? false) Padding(padding: const EdgeInsets.only(top: 8.0), child: _buildDataTable(context, sub.tableData!)), // context 전달
@@ -232,19 +232,90 @@ class _IncorrectNoteReviewScreenState extends State<IncorrectNoteReviewScreen> {
   Widget _buildAnswerExplanationSection(BuildContext context, String? title, String? text, List<String>? imagePaths, [Color? backgroundColor]) {
     bool hasText = text?.isNotEmpty ?? false;
     bool hasImages = imagePaths?.isNotEmpty ?? false;
-    if (!hasText && !hasImages) return const SizedBox.shrink();
-    final textTheme = Theme.of(context).textTheme;
+    if (!hasText && !hasImages) return const SizedBox.shrink(); // 내용 없으면 빈 위젯 반환
+
+    final textTheme = Theme.of(context).textTheme; // context 사용
+
     return Column( crossAxisAlignment: CrossAxisAlignment.start, children: [
+      // 제목 표시 (이전과 동일)
       if (title != null) Padding( padding: const EdgeInsets.only(bottom: 8.0), child: Text(title, style: textTheme.titleMedium)),
+
+      // 내용 컨테이너 (배경색 등 적용)
       Container( width: double.infinity, padding: const EdgeInsets.all(8.0), color: backgroundColor,
         child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: [
-          if (hasText) Text(text ?? '', style: textTheme.bodyMedium?.copyWith(height: 1.4)),
+          // --- 수정: 텍스트 표시 부분을 _buildMixedContent 호출로 변경 ---
+          if (hasText)
+            _buildMixedContent( // 새로 만든 헬퍼 함수 호출
+                context,        // context 전달
+                text,           // 함수가 받은 text 파라미터 전달 (question.questionText 아님!)
+                textTheme.bodyMedium?.copyWith(height: 1.4) // 적용할 기본 텍스트 스타일
+            ),
+          // --- SingleChildScrollView 및 Math.tex 제거됨 ---
+
+          // 텍스트와 이미지 사이 간격 (이전과 동일)
           if (hasText && hasImages) const SizedBox(height: 12.0),
+
+          // 이미지 리스트 처리 (이전과 동일)
           if (hasImages) Column(children: imagePaths!.map((path) => Padding( padding: const EdgeInsets.only(bottom: 8.0), child: Image.asset(path))).toList()),
-        ],),),
-      const SizedBox(height: 8.0),
-    ],);
-    // 마지막 return 불필요
+        ],),), // 내부 Column 및 Container 끝
+
+      const SizedBox(height: 8.0), // 섹션 간 하단 여백
+    ],); // 외부 Column 끝
+  }
+  Widget _buildMixedContent(BuildContext context, String? inputText, TextStyle? textStyle) {
+    if (inputText == null || inputText.isEmpty) {
+      return const SizedBox.shrink(); // 입력 없으면 빈 위젯
+    }
+
+    List<Widget> children = []; // 생성될 위젯들을 담을 리스트
+    // $...$ 패턴 또는 $가 나오기 전까지의 일반 텍스트 패턴으로 문자열 분리
+    // (주의: 복잡한 중첩 $는 처리 못할 수 있음)
+    final RegExp regex = RegExp(r'(\$.*?\$)'); // $로 감싸진 부분 찾기
+
+    inputText.splitMapJoin(
+      regex,
+      onMatch: (Match match) { // $...$ 부분 (수학식) 처리
+        String mathContent = match.group(0) ?? '';
+        // 앞뒤 $ 제거
+        if (mathContent.length >= 2) {
+          mathContent = mathContent.substring(1, mathContent.length - 1);
+        }
+        if (mathContent.isNotEmpty) {
+          children.add(
+              Padding( // 수식 위젯 좌우에 약간의 공백 추가 (선택 사항)
+                padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                child: Math.tex(
+                  mathContent, // $ 제거된 TeX 코드 전달
+                  textStyle: textStyle,
+                  mathStyle: MathStyle.text, // 기본적으로 인라인 스타일 사용
+                  onErrorFallback: (FlutterMathException e) {
+                    print("Math Error: ${e.message} in TeX: $mathContent");
+                    // 오류 발생 시 원본 텍스트 (빨간색) 표시
+                    return Text(match.group(0)!, style: textStyle?.copyWith(color: Colors.red));
+                  },
+                ),
+              )
+          );
+        }
+        return ''; // 처리 완료
+      },
+      onNonMatch: (String nonMatch) { // $...$ 가 아닌 부분 (일반 텍스트) 처리
+        if (nonMatch.isNotEmpty) {
+          // Text 위젯 사용 (자동 줄바꿈 및 띄어쓰기 적용됨)
+          children.add(Text(nonMatch, style: textStyle));
+        }
+        return ''; // 처리 완료
+      },
+    );
+
+    // 생성된 Text/Math.tex 위젯들을 Wrap 위젯으로 감싸서 반환
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center, // 세로 정렬 (텍스트 기준선)
+      alignment: WrapAlignment.start, // 가로 정렬
+      spacing: 4.0, // 위젯 사이의 가로 간격 (선택 사항)
+      runSpacing: 0.0, // 줄 사이의 세로 간격 (선택 사항)
+      children: children, // 생성된 위젯 리스트
+    );
   }
 // --- State 클래스 끝 ---
 } // _IncorrectNoteReviewScreenState 끝 (추가 괄호 없음 확인!)

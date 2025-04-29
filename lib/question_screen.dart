@@ -142,18 +142,14 @@ class _QuestionScreenState extends State<QuestionScreen> {
             elevation: 2.0, margin: const EdgeInsets.only(bottom: 8.0),
             child: Padding( padding: const EdgeInsets.all(16.0),
               child: Column( crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Math.tex(
-                  question.questionText, // JSON에서 로드한 TeX 포함 문자열
-                  textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.5), // 기존 스타일 적용
-                  mathStyle: MathStyle.display, // 필요에 따라 조절 (display, text 등)
-                ),
+                _buildMixedContent(context, question.questionText, Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.5)),
                 // 메인 이미지 리스트 (Null 및 Empty 체크)
                 if (question.imagePaths?.isNotEmpty ?? false)
                   Padding( padding: const EdgeInsets.only(top: 16.0),
                     child: Column(children: question.imagePaths!.map((path) => Padding(padding: const EdgeInsets.only(bottom: 8.0), child: Image.asset(path))).toList()),),
                 // 메인 테이블 (Null 및 Empty 체크)
                 if (question.tableData?.isNotEmpty ?? false)
-                  Padding(padding: const EdgeInsets.only(top: 16.0), child: _buildDataTable(question.tableData!)),
+                  Padding(padding: const EdgeInsets.only(top: 16.0), child: _buildDataTable(context, question.tableData!)),
               ],),),
           ),
 
@@ -164,18 +160,14 @@ class _QuestionScreenState extends State<QuestionScreen> {
               return Card( elevation: 1.0, margin: const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
                 child: Padding( padding: const EdgeInsets.all(16.0),
                   child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Math.tex(
-                      '${sub.subNumber} ${sub.questionText}', // 번호 + TeX 포함 문자열
-                      textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.4), // 기존 스타일 적용
-                      mathStyle: MathStyle.text, // 인라인 텍스트 스타일 적용 (display보다 작게)
-                    ),
+                    _buildMixedContent(context, '${sub.subNumber} ${sub.questionText}', Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.4)),
                     // 소문제 이미지 (Null 및 Empty 체크)
                     if (sub.imagePaths?.isNotEmpty ?? false)
                       Padding( padding: const EdgeInsets.only(top: 12.0),
                         child: Column(children: sub.imagePaths!.map((path) => Padding(padding: const EdgeInsets.only(bottom: 8.0), child: Image.asset(path))).toList()),),
                     // 소문제 테이블 (Null 및 Empty 체크)
                     if (sub.tableData?.isNotEmpty ?? false)
-                      Padding(padding: const EdgeInsets.only(top: 12.0), child: _buildDataTable(sub.tableData!)),
+                      Padding(padding: const EdgeInsets.only(top: 12.0), child: _buildDataTable(context, sub.tableData!)),
                   ],),),);
             }).toList(),
             const Divider(height: 32.0, thickness: 1.0),
@@ -192,30 +184,62 @@ class _QuestionScreenState extends State<QuestionScreen> {
           const SizedBox(height: 16.0),
 
           // 답안/해설 표시 영역
-          Visibility( // _isAnswerVisible 사용
-            visible: _isAnswerVisible,
-            child: Card( elevation: 1.0, color: Colors.grey.shade50,
-              child: Padding( padding: const EdgeInsets.all(16.0),
-                child: Column( crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  // Case 1: 소문제 없는 경우
-                  if (question.subQuestions.isEmpty) ...[
-                    // _buildAnswerExplanationSection 호출 확인 (Null 체크 포함)
-                    if((question.answer?.isNotEmpty ?? false) || (question.answerImagePaths?.isNotEmpty ?? false)) _buildAnswerExplanationSection('모범 답안', question.answer, question.answerImagePaths),
-                    if((question.explanation?.isNotEmpty ?? false) || (question.explanationImagePaths?.isNotEmpty ?? false)) Padding( padding: const EdgeInsets.only(top: 16.0), child: _buildAnswerExplanationSection('해설', question.explanation, question.explanationImagePaths),),
-                  ]
-                  // Case 2: 소문제 있는 경우
-                  else ...[
-                    ...question.subQuestions.map((sub) => Padding( padding: const EdgeInsets.only(bottom: 16.0), child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text('${sub.subNumber} 답안/해설', style: Theme.of(context).textTheme.titleSmall), const Divider(height: 8.0),
-                      // _buildAnswerExplanationSection 호출 확인 (Null 체크 포함)
-                      if((sub.answer?.isNotEmpty ?? false) || (sub.answerImagePaths?.isNotEmpty ?? false)) _buildAnswerExplanationSection(null, sub.answer, sub.answerImagePaths),
-                      if((sub.explanation?.isNotEmpty ?? false) || (sub.explanationImagePaths?.isNotEmpty ?? false)) Padding(padding: const EdgeInsets.only(top: 8.0), child: _buildAnswerExplanationSection(null, sub.explanation, sub.explanationImagePaths)),
-                    ],),) ).toList(),
-                    // 최상위 답/해설
-                    if((question.answer?.isNotEmpty ?? false) || (question.answerImagePaths?.isNotEmpty ?? false)) ...[ const Divider(height: 24.0, thickness: 1.0), _buildAnswerExplanationSection('종합 답안', question.answer, question.answerImagePaths),],
-                    if((question.explanation?.isNotEmpty ?? false) || (question.explanationImagePaths?.isNotEmpty ?? false)) ...[ const SizedBox(height: 8.0), _buildAnswerExplanationSection('종합 해설', question.explanation, question.explanationImagePaths),],
-                  ]
-                ],),),),),
+          // ***** Visibility 위젯 전체를 아래 내용으로 교체하세요 *****
+          Visibility(
+            visible: _isAnswerVisible, // _isAnswerVisible 사용
+            child: Card( // Card 구조 사용
+              elevation: 1.0,
+              color: Colors.grey.shade50, // 카드 배경색
+              child: Padding(
+                padding: const EdgeInsets.all(16.0), // 카드 내부 여백
+                child: Column( // 답/해설 내용을 세로로 배치
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Case 1: 소문제 없는 경우
+                    if (question.subQuestions.isEmpty) ...[
+                      // _buildAnswerExplanationSection 호출 시 인자 순서 확인! (context, title, text, imagePaths, color)
+                      if((question.answer?.isNotEmpty ?? false) || (question.answerImagePaths?.isNotEmpty ?? false))
+                        _buildAnswerExplanationSection(context, '모범 답안', question.answer, question.answerImagePaths, Colors.blue.shade50), // 순서 확인!
+                      if((question.explanation?.isNotEmpty ?? false) || (question.explanationImagePaths?.isNotEmpty ?? false))
+                        Padding( padding: const EdgeInsets.only(top: 16.0), child: _buildAnswerExplanationSection(context, '해설', question.explanation, question.explanationImagePaths, Colors.green.shade50)), // 순서 확인!
+                    ]
+                    // Case 2: 소문제 있는 경우
+                    else ...[
+                      // 각 소문제 답/해설
+                      ...question.subQuestions.map((sub) {
+                        final bool subHasAnswer = (sub.answer?.isNotEmpty ?? false) || (sub.answerImagePaths?.isNotEmpty ?? false);
+                        final bool subHasExplanation = (sub.explanation?.isNotEmpty ?? false) || (sub.explanationImagePaths?.isNotEmpty ?? false);
+                        if (!subHasAnswer && !subHasExplanation) return const SizedBox.shrink(); // 내용 없으면 표시 안 함
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('${sub.subNumber} 답안/해설', style: Theme.of(context).textTheme.titleSmall), const Divider(height: 8.0),
+                              // _buildAnswerExplanationSection 호출 시 인자 순서 확인! (context, title, text, imagePaths, color)
+                              if(subHasAnswer) _buildAnswerExplanationSection(context, null, sub.answer, sub.answerImagePaths, Colors.blue.shade50), // 순서 확인!
+                              if(subHasExplanation) Padding(padding: EdgeInsets.only(top: subHasAnswer ? 8.0 : 0), child: _buildAnswerExplanationSection(context, null, sub.explanation, sub.explanationImagePaths, Colors.green.shade50)), // 순서 확인!
+                            ],
+                          ),
+                        );
+                      }).toList(), // map 끝
+
+                      // 최상위 답/해설 (존재할 경우)
+                      // _buildAnswerExplanationSection 호출 시 인자 순서 확인!
+                      if((question.answer?.isNotEmpty ?? false) || (question.answerImagePaths?.isNotEmpty ?? false)) ...[
+                        const Divider(height: 24.0, thickness: 1.0),
+                        _buildAnswerExplanationSection(context, '종합 답안', question.answer, question.answerImagePaths, Colors.blue.shade100), // 순서 확인!
+                      ],
+                      if((question.explanation?.isNotEmpty ?? false) || (question.explanationImagePaths?.isNotEmpty ?? false)) ...[
+                        const SizedBox(height: 8.0),
+                        _buildAnswerExplanationSection(context, '종합 해설', question.explanation, question.explanationImagePaths, Colors.green.shade100), // 순서 확인!
+                      ],
+                    ]
+                  ],
+                ),
+              ),
+            ),
+          ),
           const SizedBox(height: 16.0),
         ],
       ),
@@ -286,50 +310,114 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   // --- Helper Widgets ---
   // 테이블 생성 헬퍼
-  Widget _buildDataTable(List<Map<String, dynamic>> tableData) {
+  Widget _buildDataTable(BuildContext context, List<Map<String, dynamic>> tableData) { // <--- context 추가!
     if (tableData.isEmpty) return const SizedBox.shrink();
     try {
+      // 첫 번째 행의 키들을 사용하여 컬럼 헤더 생성
       final columns = tableData.first.keys.map((key) => DataColumn(label: Expanded(child: Text(key, style: const TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center)))).toList();
+      // 각 행 데이터를 DataRow로 변환
       final rows = tableData.map((rowMap) {
         final cells = columns.map((column) {
-          final key = ((column.label as Expanded).child as Text).data!; // 키 추출 방식 수정
-          final cellValue = rowMap[key];
-          return DataCell(Center(child: Text(cellValue?.toString() ?? ''))); // null 처리 및 센터 정렬
+          final labelWidget = column.label;
+          if (labelWidget is Expanded && labelWidget.child is Text) {
+            final key = (labelWidget.child as Text).data;
+            if (key != null) {
+              final cellValue = rowMap[key];
+              return DataCell(Center(child: Text(cellValue?.toString() ?? '')));
+            }
+          }
+          return const DataCell(Text('')); // 키 추출 실패 시
         }).toList();
-        if (cells.length != columns.length) { print("Warning: Row data length mismatch..."); /* 부족한 셀 채우기 등 추가 가능 */ }
+        // 컬럼 수 일치 확인 (선택적)
+        if (cells.length != columns.length) { print("Warning: Row data length mismatch..."); }
         return DataRow(cells: cells);
       }).toList();
-      // DataTable 스타일링 및 스크롤 추가
+      // DataTable 위젯 반환
       return DataTable( columnSpacing: 16.0, border: TableBorder.all(color: Colors.grey.shade400, width: 1), headingRowColor: MaterialStateProperty.all(Colors.grey.shade200), columns: columns, rows: rows );
-      // 가로 스크롤이 필요하면 DataTable을 SingleChildScrollView로 감싸야 함
-      // return SingleChildScrollView( scrollDirection: Axis.horizontal, child: DataTable(...) );
-    } catch (e) { print("Error building table: $e"); return Text("테이블 표시 오류", style: TextStyle(color: Colors.red)); }
-    // return const SizedBox.shrink(); // try-catch 후 반환 제거 (catch에서 반환하므로)
+    } catch (e) {
+      print("Error building table: $e");
+      return Text("테이블 표시 오류", style: TextStyle(color: Colors.red));
+    }
+    // ***** 추가: 모든 코드 경로에서 Widget 반환 보장 *****
+    return const SizedBox.shrink();
+    // ***********************************************
   }
 
   // 답/해설 섹션 생성 헬퍼
-  Widget _buildAnswerExplanationSection(String? title, String? text, List<String>? imagePaths, [Color? backgroundColor]) { // 배경색 옵션 및 제거
+  Widget _buildAnswerExplanationSection(BuildContext context, String? title, String? text, List<String>? imagePaths, [Color? backgroundColor]) { // <--- context 추가!
     bool hasText = text?.isNotEmpty ?? false;
     bool hasImages = imagePaths?.isNotEmpty ?? false;
-    if (!hasText && !hasImages) return const SizedBox.shrink(); // 내용 없으면 빈 위젯 반환
-    final textTheme = Theme.of(context).textTheme;
+    if (!hasText && !hasImages) return const SizedBox.shrink();
+
+    final textTheme = Theme.of(context).textTheme; // context 사용 가능
 
     return Column( crossAxisAlignment: CrossAxisAlignment.start, children: [
-      if (title != null) Padding( padding: const EdgeInsets.only(bottom: 8.0), child: Text(title, style: Theme.of(context).textTheme.titleMedium)),
-      // Container 배경색 제거 또는 다른 스타일 적용 가능
-      Container( width: double.infinity, padding: const EdgeInsets.all(8.0), /* color: backgroundColor, */ child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: [
-        if (hasText)
-          Math.tex(
-            text ?? '', // TeX 포함 답/해설 텍스트
-            textStyle: textTheme.bodyMedium?.copyWith(height: 1.4), // 기존 스타일 적용
-            mathStyle: MathStyle.text, // 인라인 스타일
-          ),
-        if (hasText && hasImages) const SizedBox(height: 12.0),
-        // 이미지 리스트 처리 (null 체크 후 Column 사용)
-        if (hasImages) Column(children: imagePaths!.map((path) => Padding( padding: const EdgeInsets.only(bottom: 8.0), child: Image.asset(path))).toList()),
-      ],),),
-      const SizedBox(height: 8.0), // 섹션 간 하단 여백
+      if (title != null) Padding( padding: const EdgeInsets.only(bottom: 8.0), child: Text(title, style: textTheme.titleMedium)),
+      Container( width: double.infinity, padding: const EdgeInsets.all(8.0), color: backgroundColor,
+        child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: [
+          if (hasText)
+            _buildMixedContent(context, text, textTheme.bodyMedium?.copyWith(height: 1.4)),
+          if (hasText && hasImages) const SizedBox(height: 12.0),
+          if (hasImages) Column(children: imagePaths!.map((path) => Padding( padding: const EdgeInsets.only(bottom: 8.0), child: Image.asset(path))).toList()),
+        ],),),
+      const SizedBox(height: 8.0),
     ],);
+    // 이 함수는 마지막 return 불필요
+  }
+  Widget _buildMixedContent(BuildContext context, String? inputText, TextStyle? textStyle) {
+    if (inputText == null || inputText.isEmpty) {
+      return const SizedBox.shrink(); // 입력 없으면 빈 위젯
+    }
+
+    List<Widget> children = []; // 생성될 위젯들을 담을 리스트
+    // $...$ 패턴 또는 $가 나오기 전까지의 일반 텍스트 패턴으로 문자열 분리
+    // (주의: 복잡한 중첩 $는 처리 못할 수 있음)
+    final RegExp regex = RegExp(r'(\$.*?\$)'); // $로 감싸진 부분 찾기
+
+    inputText.splitMapJoin(
+      regex,
+      onMatch: (Match match) { // $...$ 부분 (수학식) 처리
+        String mathContent = match.group(0) ?? '';
+        // 앞뒤 $ 제거
+        if (mathContent.length >= 2) {
+          mathContent = mathContent.substring(1, mathContent.length - 1);
+        }
+        if (mathContent.isNotEmpty) {
+          children.add(
+              Padding( // 수식 위젯 좌우에 약간의 공백 추가 (선택 사항)
+                padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                child: Math.tex(
+                  mathContent, // $ 제거된 TeX 코드 전달
+                  textStyle: textStyle,
+                  mathStyle: MathStyle.text, // 기본적으로 인라인 스타일 사용
+                  onErrorFallback: (FlutterMathException e) {
+                    print("Math Error: ${e.message} in TeX: $mathContent");
+                    // 오류 발생 시 원본 텍스트 (빨간색) 표시
+                    return Text(match.group(0)!, style: textStyle?.copyWith(color: Colors.red));
+                  },
+                ),
+              )
+          );
+        }
+        return ''; // 처리 완료
+      },
+      onNonMatch: (String nonMatch) { // $...$ 가 아닌 부분 (일반 텍스트) 처리
+        if (nonMatch.isNotEmpty) {
+          // Text 위젯 사용 (자동 줄바꿈 및 띄어쓰기 적용됨)
+          children.add(Text(nonMatch, style: textStyle));
+        }
+        return ''; // 처리 완료
+      },
+    );
+
+    // 생성된 Text/Math.tex 위젯들을 Wrap 위젯으로 감싸서 반환
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center, // 세로 정렬 (텍스트 기준선)
+      alignment: WrapAlignment.start, // 가로 정렬
+      spacing: 4.0, // 위젯 사이의 가로 간격 (선택 사항)
+      runSpacing: 0.0, // 줄 사이의 세로 간격 (선택 사항)
+      children: children, // 생성된 위젯 리스트
+    );
   }
 // --- State 클래스 끝 ---
 }
