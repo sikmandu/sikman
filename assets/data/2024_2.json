@@ -1,0 +1,487 @@
+﻿{
+  "year": 2024,
+  "session": 2,
+  "questions": [
+    {
+      "number": 1,
+      "type": "전선 굵기",
+      "questionText": "송전단 전압 6600[V]의 3상 선로에서 수전단 전압을 6300[V]로 유지하고자 한다. 부하 전력 2000[kW], 역률 0.8, 전선의 길이 3[km]이며, 선로의 리액턴스를 무시한다면 적당한 경동선의 굵기$[mm^2]$는 몇인지 선정하시오. (단, 전선의 공칭단면적은 아래에 주어진 조건에서 선정하시오.\n\n[공칭 단면적$(mm^2)$  10  16  25  35  50  70  95  120]",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$70[mm^2]$",
+      "explanation": "$e=V_s-V_r=6600-6300=\\sqrt{3}I(R\\cos\\theta+X\\sin\\theta)$\n\n리액턴스 무시하면 $e=\\sqrt3\\,IR\\cos\\theta$\n\n$R=\\dfrac{e}{\\sqrt{3}I\\cos\\theta}=\\dfrac{6600-6300}{\\sqrt{3}\\cdot\\dfrac{2000\\times10^3}{\\sqrt{3}\\cdot6300\\cdot0.8}\\cdot0.8}=0.95[\\Omega]$\n\n\n$R=\\rho\\dfrac{l}{A}\\quad\\,A=\\rho\\dfrac{l}{R}$\n\n$\\therefore\\,A=\\dfrac{1}{55}\\cdot\\dfrac{3000}{0.95}=57.42[mm^2]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 2,
+      "type": "단답",
+      "questionText": "다음 설명에 해당되는 기기의 명칭을 각각 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": "(  1  ): 배전 선로에서 지락 고장이나 단락 고장 사고가 발생하였을 때 고장을 검출하여 선로를 차단한 후 일정시간 경과하면 자동적으로 재투입 동작을 반복함으로써 순간 고장을 제거할 수 있다. 단, 영구 고장일 경우에는 정해진 재투입 동작을 반복한 후 사고 구간만을 계통에서 분리하여 선로에 파급되는 정전 범위를 최소한으로 억제하도록 한다.\n(  2  ) : 부하전류를 차단할 수 없으며 무부하 상태의 회로를 개폐 시, 특히 기기의 점검. 수리를 할 때나 회로의 접속을 변경할 때 사용한다. 근래에는 ASS를 사용하며. 평소 66[kV] 이상에서 사용하는 개폐장치이다.",
+      "subQuestions": [],
+      "answer": "(1) : 리클로저\n(2) : 선로개폐기",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 3,
+      "type": "온도",
+      "questionText": "연동선을 사용한 코일의 저항이 0[℃]에서 4000[Ω]이었다. 이 코일에 전류를 흘렸더니 그 온도가 상승하여 코일의 저항이 4500[Ω]으로 되었다고 한다. 이 때 연동선의 온도를 구하시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "29.31[℃]",
+      "explanation": "0[℃]$\\rightarrow\\,a_0=\\dfrac{1}{234.5}$\n\n$R_t=R_0(1+a_0(t_2-t_0))$\n\n$4500=4000(1+\\dfrac{1}{234.5}(t_2-0))$\n\n$\\therefore\\,t_2=\\left(\\dfrac{4500}{4000}-1\\right)\\cdot234.5=29.31[℃]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 4,
+      "type": "논리 회로",
+      "questionText": "다음의 논리식에 해당하는 유접점 시퀀스 회로를 완성하시오. （단, 각 접점의 식별 문자를 표기하시오.）",
+      "imagePaths": [ "assets/images/2024_2_q4.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$\\therefore\\,L=XY+\\overline{X}\\overline{Y}+\\overline{Z}$",
+      "explanation": "$L=(X+\\overline{Y}+\\overline{Z})(\\overline{X}+Y+\\overline{Z})=X\\overline{X}+XY+X\\overline{Z}+\\overline{X}\\overline{Y}+Y\\overline{Y}+\\overline{Y}\\overline{Z}+\\overline{X}\\overline{Z}+Y\\overline{Z}+\\overline{Z}\\overline{Z}$\n\n$X\\overline{X}=0$, $\\overline{X}\\overline{X}=\\overline{X}$\n\n$L=XY+X\\overline{Z}+\\overline{X}\\overline{Y}+\\overline{Y}\\overline{Z}+\\overline{X}\\overline{Z}+Y\\overline{Z}+\\overline{Z}=\\overline{Z}(X+\\overline{Y}+\\overline{X}+Y+1)+XY+\\overline{X}\\overline{Y}$\n\n$X+\\overline{X}=1$, $X+1=1$\n\n$\\therefore\\,L=XY+\\overline{X}\\overline{Y}+\\overline{Z}$",
+      "answerImagePaths": [ "assets/images/2024_2_a4.png" ],
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 5,
+      "type": "단답",
+      "questionText": "한국전기설비규정(KEC)에 따른 용어의 정의이다. (   )에 들어갈 내용을 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": "“PEN 도체(protective earthing conductor and netural conductor)란 (  1  )회로에서 (  2  ) 겸용 보호도체를 말한다.\n\n“PEL 도체(protective earthing conductor and a line conductor)”란 (  3  )회로에서 (  4  ) 겸용 보호도체를 말한다.",
+      "subQuestions": [],
+      "answer": "(1) : 교류\n(2) : 중성선\n(3) : 직류\n(4) : 선도체",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 6,
+      "type": "단답",
+      "questionText": "중성점 직접 접지방식의 장점 및 단점을 각각 3가지씩 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "장점",
+          "imagePaths": null,
+          "answer": "1선 지락 시에 건전 상의 대지 전압 상승이 적다.\n\n계전기 동작이 확실해진다\n\n변압기의 단절연이 가능하다.",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "단점",
+          "imagePaths": null,
+          "answer": "통신선 유도장해를 크게 미친다\n\n송전계통의 과도안정도가 나빠진다\n\n차단기의 동작이 많아진다",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 7,
+      "type": "전압 강하",
+      "questionText": "그림과 같이 환상 직류 배전 선로에서 각 구간의 왕복 저항은 0.1[Ω], 급전점 A의 전압은 100[V], 부하점 B, C의 부하전류는 각각 30[A], 50[A]라 할 때 부하점 B의 전압[V]을 구하시오.",
+      "imagePaths": [ "assets/images/2024_2_q7.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "96.5[V]",
+      "explanation": "폐회로내의 전압강하의 합은 0\n\n$0.1I_1+0.1(I_1-30)+0.1(I_1-30)-0.1I_2=0$\n\n$0.3I_1-0.1I_2=6$\n\n$C점\\,(I_1-30)+I_2-50=0$\n\n$I_1=80-I_2$\n\n$0.3(80-I_2)-0.1I_2=6$\n\n$24-0.4I_2=6$\n\n$\\therefore\\,I_2=\\dfrac{24-6}{0.4}=45[A]$\n\n$I_1=80-I_2=80-45=35$\n\n$V_B=V_A-I_1R=100-35\\cdot0.1=96.5[V]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 8,
+      "type": "단답",
+      "questionText": "다음은 전류계붙이 개폐기의 그림 기호다. 그림 기호에서 의미하는 내용을 각각 쓰시오. (단, 각 수치를 포함하여 쓰시오.)",
+      "imagePaths": [ "assets/images/2024_2_q8.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "3P30A :",
+          "imagePaths": null,
+          "answer": "3P30A : 3극 30[A]",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "f15A :",
+          "imagePaths": null,
+          "answer": "f15A : 퓨즈 정격 15[A]",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "A5 :",
+          "imagePaths": null,
+          "answer": "A5 : 정격전류 5[A]인 전류계",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 9,
+      "type": "조명 설비",
+      "questionText": "가로 10[m], 세로 16[m], 천정높이 3.85[m], 작업면 높이 0.85[m]인 사무실에 천장 직부 형광등을(F40×2) 설치하고자 한다. 이때 다음 각 물음에 답하시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "F40×2의 그림기호를 그리시오.\n\n(단, KS C 0301에서 규정하는 그림기호로 그리시오.)",
+          "imagePaths": null,
+          "answer": "",
+          "explanation": "",
+          "answerImagePaths": [ "assets/images/2024_2_a9.png" ],
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "이 사무실의 실지수를 구하시오.",
+          "imagePaths": null,
+          "answer": "2.05",
+          "explanation": "실지수$=\\dfrac{XY}{H(X+Y)}=\\dfrac{10\\cdot16}{(3.85-0.85)(10+16)}=2.05$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "이 사무실의 작업면 조도는 300[lx], 천장 반사율 70[%], 벽 반사율 50[%], 바닥 반 사율은 10[%], 40[W] 형광등(F40×2) 1개의 광속은 3150[1m], 보수율은 70[%], 조명율을 60[%]로 한다면 이 사무실에 필요한 형광등(F40×2)수는 몇 개가 필요한지 구하시오.",
+          "imagePaths": null,
+          "answer": "37[개]",
+          "explanation": "$N=\\dfrac{EAD}{FU}=\\dfrac{300\\cdot(10\\cdot16)}{3150\\cdot0.6\\cdot0.7}=36.28$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 10,
+      "type": "왜형률",
+      "questionText": "그림과 같이 Y결선된 평형 부하에 전압을 측정할 때 전압계의 지시값이 상전압 $V_P=150[V]$, 선간전압$V_l=220[V]$로 나타났다. 다음 각 물음에 답하시오. (단, 부하측에 인가된 전압은 각상 평형 전압이고 기본파와 제3고조파분 전압만이 포함되어 있다.)",
+      "imagePaths": [ "assets/images/2024_2_q10.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "제3고조파 전압[V]을 구하시오.",
+          "imagePaths": null,
+          "answer": "79.79[V]",
+          "explanation": "상전압에는 기본파와 제3고조파 전압이 존재\n\n$V_P=\\sqrt{V_1^{2}+V_3^{2}}$, $150=\\sqrt{V_1^{2}+V_3^{2}}$\n\n선간 전압에는 제3고조파분이 없음\n\n$V_l=\\sqrt3V_1$, $220=\\sqrt3V_1$\n\n$V_1=\\dfrac{220}{\\sqrt3}=127.02[V]$\n\n$\\therefore\\,V_3=\\sqrt{V_P^{2}-V_1^{2}}=\\sqrt{150^2-127.02^2}=79.79[V]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "전압의 왜형률[%]을 구하시오.",
+          "imagePaths": null,
+          "answer": "62.82[%]",
+          "explanation": "왜형률 $=\\dfrac{전\\,고조파의\\,실효값}{기본파의\\,실효값}\\times100=\\dfrac{V_3}{V_1}\\times100=\\dfrac{79.79}{127.02}\\times100=62.82[\\%]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 11,
+      "type": "변연장",
+      "questionText": "3상 3선식 3000[V], 200[kVA]의 배전선로 전압을 3100[V]로 승압하기 위하여 단상 변압기 3대를 그림과 같이 접속하였다. 이 변압기의 1, 2차 전압과 용량을 구하시오. (단, 변압기의 손실은 무시한다.)",
+      "imagePaths": [ "assets/images/2024_2_q11.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "변압기 1, 2차 전압[V]",
+          "imagePaths": null,
+          "answer": "1차 전압 : 3000[V]\n\n2차 전압 : 66.31[V]",
+          "explanation": "$e_2=\\sqrt{\\dfrac{4V_h^2-V_l^2}{12}}-\\dfrac{V_l}{2}$\n\n$=\\sqrt{\\dfrac{4\\cdot3100^2-3000^2}{12}}-\\dfrac{3000}{2}=66.31[V]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "변압기 용량 [kVA]",
+          "imagePaths": null,
+          "answer": "",
+          "explanation": "자기용량$=3I_2e_2$\n\n$I_2=\\dfrac{200\\times10^3}{\\sqrt3\\cdot3100}=37.25[A]$\n\n$=3\\cdot66.31\\cdot37.25\\times10^{-3}=7.41[kVA]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": true
+    },
+    {
+      "number": 12,
+      "type": "단답",
+      "questionText": "고휘도 방전 램프(HID Lamp)의 종류를 3가지만 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "고압 수은등, 고압 나트륨등, 메탈 핼라이드 램프",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 13,
+      "type": "단답",
+      "questionText": "다음은 접지에 관한 내용이다. 각 물음에 답하시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "피뢰기 접지공사를 실시한 후, 보조 접지 2개(a와 b)를 시설하여 접지저항을 측정하였더니 본 접지와 a 사이의 저항은 86[Ω], a와 b 사이의 저항은 156[Ω], b와 본 접지 사이의 저항은 80[Ω]이었다. 이 때 피뢰기의 접지저항값[Ω]을 구하시오.",
+          "imagePaths": null,
+          "answer": "$5[\\Omega]$",
+          "explanation": "$R=\\dfrac{1}{2}(86+80-156)=5[\\Omega]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "한국전기설비규정(KEC)에서 접지와 관련된 용어의 정의이다. 보기를 참고하여 (  )에 들어갈 내용을 쓰시오.\n\n\n(보기)\n보호도체, 접지도체, 접지시스템, 내부 피뢰시스템, 계통접지, 보호접지",
+          "supplementaryInfo": "(  1  ) ： 계통, 설비 또는 기기의 한 점과 접지극 사이의 도전성 경로 또는 그 경로의 일부가 되는 도체\n\n(  2  ) ： 고장 시 감전에 대한 보호를 목적으로 기기의 한 점 또는 여러 점을 접지 하는 것\n\n(  3  ) ： 기기나 계통을 개별적 또는 공통으로 접지하기 위하여 필요한 접속 및 장치로 구성된 설비",
+          "imagePaths": null,
+          "answer": "1 : 접지도체\n\n2 : 보호접지\n\n3 : 접지시스템",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 14,
+      "type": "단답",
+      "questionText": "주어진 조건과 배선평면도를 이용하여 다음 각 물음에 답하시오.",
+      "imagePaths": [ "assets/images/2024_2_q14.png" ],
+      "supplementaryInfo": "사용하는 전선은 모두 NR $4.0[mm^2]$이다.\n\n박스는 모두 4각 박스를 사용하며, 기구 1개에 박스 1개를 사용한다.\n\n  (2개 연등인 경우에는 각 1개씩을 사용하는 것으로 한다.)\n\n전선관은 콘크리트 매입 후강금속관이다.\n\n층고는 3[m]이고, 분전반의 설치 높이는 1.5[m]이다.\n\n3로 스위치 이외의 스위치는 단극 스위치를 사용하며, 2개를 나란히 사용한 개소는 2개소이다.\n\n기구는 다음과 같다\n\nA  :  적산 전력계(전력량계)      B  :  분전반(전등용)\n\nC  :  백열전등           D  :  텀블러스위치\n\nE  :  텀블러스위치(3로 스위치) F  : 15[A]용 콘센트",
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "점선으로 표시된 위치（A ~ F)에 기구를 배치하여 배선평면도를 완성하려고 한다. 해당되는 기구의 그림기호를 그리시오.",
+          "imagePaths": [ "assets/images/2024_2_q14_1.png" ],
+          "answer": "",
+          "explanation": "",
+          "answerImagePaths": [ "assets/images/2024_2_a14_1.png" ],
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "배선평면도에서 ①-③의 배선 가닥수는 몇 가닥인지 쓰시오.",
+          "imagePaths": null,
+          "answer": "① 2가닥\n\n② 3가닥\n\n③ 4가닥",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "도면의 ④에 대한 그림기호의 명칭은 무엇인지 쓰시오.",
+          "imagePaths": null,
+          "answer": "케이블 헤드",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "4)",
+          "questionText": "본 배선평면도에 소요되는 4각 박스와 부싱은 몇 개인지 쓰시오.\n\n(단, 자재의 규격은 구분하지 않고 개수만 산정한다.）",
+          "imagePaths": null,
+          "answer": "4각 박스 25개\n\n부싱 46개",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 15,
+      "type": "단답",
+      "questionText": "전력계통에 발생되는 단락용량 경감대책을 3가지만 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "고임피던스 기기 채택\n\n한류리액터 설치\n\n계통분할방식",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 16,
+      "type": "",
+      "questionText": "다음 그림은 변류기를 영상 접속시켜 그 잔류 회로에 지락 계전기 DG를 삽입시킨 것이다. 선로 전압은 66[kV], 중성점에 300[Ω]의 저항 접지로 하였고, 변류기의 변류비는 300/5이다. 송전 전력 20000[kW], 역률 0.8(지상)이고, a상에 완전 지락사고가 발생하였다고 할 때 다음 각 물음에 답하시오.\n\n(단, 부하의 정상 임피던스, 역상 임피던스 및 기타 주어지지 않은 요소들은 무시한다.)",
+      "imagePaths": [ "assets/images/2024_2_q16.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "지락 계전기 DG에 흐르는 전류는 몇 [A]인가?",
+          "imagePaths": null,
+          "answer": "2.12[A]",
+          "explanation": "$I_g=\\dfrac{V/\\sqrt3}{R}=\\dfrac{66\\times10^3}{\\sqrt3\\cdot300}=127.02[A]$\n\n$I_{DG}=127.02\\cdot\\dfrac{5}{300}=2.12[A]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "a상 전류계 $A_a$에 흐르는 전류는 몇 [A]인가?",
+          "imagePaths": null,
+          "answer": "5.49[A]",
+          "explanation": "$I_a=\\dfrac{20000}{\\sqrt3\\cdot66\\cdot0.8}\\cdot(0.8-j0.6)+\\dfrac{66\\times10^3/\\sqrt3}{300}\\cdot\\dfrac{5}{300}=5.49[A]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "b상 전류계 $A_b$에 흐르는 전류는 몇 [A]인가? ",
+          "imagePaths": null,
+          "answer": "3.64[A]",
+          "explanation": "$I_b=\\dfrac{20000}{\\sqrt3\\cdot66\\cdot0.8}\\cdot\\dfrac{5}{300}=3.64[A]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "4)",
+          "questionText": "c상 전류계 $A_c$에 흐르는 전류는 몇 [A]인가? ",
+          "imagePaths": null,
+          "answer": "3.64[A]",
+          "explanation": "$I_c=\\dfrac{20000}{\\sqrt3\\cdot66\\cdot0.8}\\cdot\\dfrac{5}{300}=3.64[A]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 17,
+      "type": "차단 용량",
+      "questionText": "그림과 같이 A 변전소에서 B 변전소로 1회선 송전을 하고 있다. 이 경우 B 변전소의 차단기 (a)의 차단용량[MVA]을 차단기 정격용량표에서 선정하시오. (단, 계통의 %임피던스는 10[MVA]를 기준으로 한다.)\n\n[차단기 정격용량(MVA)  100  150  250  300  400  500  750]",
+      "imagePaths": [ "assets/images/2024_2_q17.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "750[MVA]",
+      "explanation": "$\\%Z_s=0.7+0.9=1.6[\\%]$\n\n$P_s=\\dfrac{100}{\\%Z_s}P_n=\\dfrac{100}{1.6}\\cdot10=625[MVA]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 18,
+      "type": "시퀀스 제어",
+      "questionText": "다음 의 PLC 명령어 프로그램과 예시를 참고하여 래더 다이어그램 방식으로 래더도를 완성하시오.（단, 래더도 작성 시 접속에 대한 접점을 반드시 표기하시오.）",
+      "imagePaths": [ "assets/images/2024_2_q18.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": [ "assets/images/2024_2_a18.png" ],
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    }
+  ]
+}

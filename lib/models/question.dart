@@ -1,15 +1,17 @@
 // lib/models/question.dart
 
 // 소문제 정보를 담는 클래스
+
 class SubQuestion {
   final String subNumber;
   final String questionText;
   final List<String>? imagePaths; // 여러 이미지 경로 허용
   final String? answer;
   final String? explanation;
+  final String? supplementaryInfo;
   final List<String>? answerImagePaths;
   final List<String>? explanationImagePaths;
-  final List<Map<String, dynamic>>? tableData; // 테이블 데이터 (List<Map<String, String>> 이 더 정확할 수 있음)
+  final String? tableImagePath; // <-- 추가 (String? 타입)
 
   SubQuestion({
     required this.subNumber,
@@ -19,7 +21,8 @@ class SubQuestion {
     this.explanation,
     this.answerImagePaths,
     this.explanationImagePaths,
-    this.tableData,
+    this.tableImagePath, // <-- 생성자에 추가
+    this.supplementaryInfo,
   });
 
   factory SubQuestion.fromJson(Map<String, dynamic> json) {
@@ -47,7 +50,8 @@ class SubQuestion {
       explanation: json['explanation'] as String?, // null 허용
       answerImagePaths: parseImagePaths(json['answerImagePaths']),
       explanationImagePaths: parseImagePaths(json['explanationImagePaths']),
-      tableData: parseTableData(json['tableData']),
+      tableImagePath: json['tableImagePath'] as String?,
+      supplementaryInfo: json['supplementaryInfo'] as String?,
     );
   }
 }
@@ -58,12 +62,13 @@ class Question {
   final String type;
   final String questionText; // 메인 질문 또는 전체 질문
   final List<String>? imagePaths; // 메인 질문 이미지 경로 리스트
+  final String? supplementaryInfo; // String? 타입으로 추가
   final List<SubQuestion> subQuestions; // 소문제 리스트 (없으면 빈 리스트)
   final String? answer; // 전체 답안 (요약 또는 null)
   final String? explanation; // 전체 해설 (요약 또는 null)
   final List<String>? answerImagePaths; // 전체 답안 이미지 경로 리스트
   final List<String>? explanationImagePaths; // 전체 해설 이미지 경로 리스트
-  final List<Map<String, dynamic>>? tableData; // 메인 질문 테이블 데이터
+  final String? tableImagePath; // <-- 추가
   final bool isKillerProblem;
 
   Question({
@@ -71,12 +76,13 @@ class Question {
     required this.type,
     required this.questionText,
     this.imagePaths,
+    this.supplementaryInfo, // <--- 생성자에 추가
     required this.subQuestions, // 필수로 빈 리스트라도 받도록 함
     this.answer,
     this.explanation,
     this.answerImagePaths,
     this.explanationImagePaths,
-    this.tableData,
+    this.tableImagePath, // <-- 생성자에 추가
     required this.isKillerProblem,
   });
 
@@ -87,12 +93,7 @@ class Question {
       }
       return null;
     }
-    List<Map<String, dynamic>>? parseTableData(dynamic data) {
-      if (data is List) {
-        return data.map((item) => Map<String, dynamic>.from(item as Map)).toList();
-      }
-      return null;
-    }
+
 
     // subQuestions 파싱
     List<SubQuestion> subs = [];
@@ -107,12 +108,13 @@ class Question {
       type: json['type'] as String? ?? '',
       questionText: json['questionText'] as String? ?? '',
       imagePaths: parseImagePaths(json['imagePaths']),
+      supplementaryInfo: json['supplementaryInfo'] as String?, // <--- 필드 파싱 추가 (String? 타입)
       subQuestions: subs, // 파싱된 소문제 리스트 또는 빈 리스트
       answer: json['answer'] as String?,
       explanation: json['explanation'] as String?,
       answerImagePaths: parseImagePaths(json['answerImagePaths']),
       explanationImagePaths: parseImagePaths(json['explanationImagePaths']),
-      tableData: parseTableData(json['tableData']),
+      tableImagePath: json['tableImagePath'] as String?,
       isKillerProblem: json['isKillerProblem'] as bool? ?? false,
     );
   }

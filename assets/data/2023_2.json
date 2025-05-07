@@ -1,0 +1,603 @@
+﻿{
+  "year": 2023,
+  "session": 2,
+  "questions": [
+    {
+      "number": 1,
+      "type": "부하 설비",
+      "questionText": "어느 수용가의 수전설비에 변압기가 그림과 같이 설치되어 있고, 각 변압기에 연결된 수용가군의 설비용량, 수용률과 각 수용가군 내 수용가 간의 부등률, 변압기 상호간의 부등률은 표에 나타낸 것과 같다. 다음 각 물음에 답하시오.",
+      "imagePaths": [ "assets/images/2023_2_q1.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "수용가 A군에 전력을 공급하기 위해 필요한 TR #1 변압기의 용량$[kVA]$을 구하시오.",
+          "imagePaths": null,
+          "answer": "$25[kVA]$",
+          "explanation": "TR #1 $=\\dfrac{50\\cdot0.6}{1.2\\cdot1}=25[kVA]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "수용가 B군에 전력을 공급하기 위해 필요한 TR #2 변압기의 용량$[kVA]$을 구하시오.",
+          "imagePaths": null,
+          "answer": "$12.5[kVA]$",
+          "explanation": "TR #2 $=\\dfrac{30\\cdot0.5}{1.2\\cdot1}=12.5[kVA]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "간선에 걸리는 최대 부하$[kW]$를 구하시오.",
+          "imagePaths": null,
+          "answer": "$28.85[kW]$",
+          "explanation": "최대 부하 $=\\dfrac{25+12.5}{1.3}=28.85[kW]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": [
+        {
+          "": "설비용량",
+          "수용가 A군": "50[kW]",
+          "수용가 B군": "30[kW]"
+        },
+        {
+          "": "수용률",
+          "수용가 A군": "0.6",
+          "수용가 B군": "0.5"
+        },
+        {
+          "": "역률",
+          "수용가 A군": "1.0",
+          "수용가 B군": "1.0"
+        },
+        {
+          "": "수용가 간의 부등률",
+          "수용가 A군": "1.2",
+          "수용가 B군": "1.2"
+        },
+        {
+          "": "변압기 간의 부등률",
+          "수용가 A군": "1.3",
+          "수용가 B군": "1.3"
+        }
+      ],
+      "isKillerProblem": false
+    },
+    {
+      "number": 2,
+      "type": "역률 개선",
+      "questionText": "출력이 7.5[kW], 역률이 80[%]인 3상 380[V]의 유도전동기가 연결된 회로가 있다. 다음 각 물음에 답하시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "유도전동기가 연결된 회로에 병렬로 전력용 커패시터를 설치하여 역률을 90[%]로 개선하고자 할 때 전력용 커패시터의 용량을 구하시오.",
+          "imagePaths": null,
+          "answer": "$1.99[kVA]$",
+          "explanation": "$Q=P(\\tan\\theta_1-\\tan\\theta_2)=P(\\dfrac{\\sqrt{1-\\cos^2\\theta_1}}{\\cos\\theta_1}-\\dfrac{\\sqrt{1-\\cos^2\\theta_2}}{\\cos\\theta_2})$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "“(1)”에서 구한 용량을 공급하기 위해 필요한 1상당 전력용 커패시터의 정전용량$(\\mu\\,F)$을 구하시오. (단, 전원의 주파수는 60[Hz]이고, 전력용 커패시터를 $\\Delta$로 결선하는 경우이다.)",
+          "imagePaths": null,
+          "answer": "$12.19[\\mu\\,F]$",
+          "explanation": "$C=\\dfrac{Q_\\Delta}{3\\cdot2\\pi\\,fV^2}=\\dfrac{1.99\\times10^3}{3\\cdot2\\pi\\cdot60\\cdot380^2}=12.19\\times10^{-6}[F]=12.19[\\mu\\,F]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 3,
+      "type": "단답",
+      "questionText": "한국전기설비규정에 따라 일반인이 접촉할 우려가 있는 장소에는 주택용 배선차단기를 시설해야 한다. 한국전기설비규정에서 정하는 주택용 배선차단기의 순시트립전류에 따른 차단기의 유형을 쓰고, 주택용 배선차단기의 과전류트립 동작시간에 대한 부동작 전류와 동작 전류를 정격전류의 배수로 쓰시오. \n(단, $I_n$은 차단기의 정격전류이다.)",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": null,
+      "answer": "(1) B\n(2) C\n(3) D\n(4) 1.13\n(5) 1.45",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": [
+        {
+          "순시트립전류에 따른 차단기의 유형": "(1)",
+          "순시트립범위": "$3I_n$ 초과 ~ $5I_n$이하"
+        },
+        {
+          "순시트립전류에 따른 차단기의 유형": "(2)",
+          "순시트립범위": "$5I_n$ 초과 ~ $10I_n$이하"
+        },
+        {
+          "순시트립전류에 따른 차단기의 유형": "(3)",
+          "순시트립범위": "$10I_n$ 초과 ~ $20I_n$이하"
+        }
+      ],
+      "tableData_2": [
+        {
+          "정격전류의 구분": "63[A] 이하",
+          "시간": "60분",
+          "부동작 전류": "(4)배",
+          "동작 전류": "(5)배"
+        },
+        {
+          "정격전류의 구분": "63[A] 초과",
+          "시간": "120분",
+          "부동작 전류": "(4)배",
+          "동작 전류": "(5)배"
+        }
+      ],
+      "isKillerProblem": false
+    },
+    {
+      "number": 4,
+      "type": "기타",
+      "questionText": "그림은 다이오드를 사용한 브리지 정류회로(전파 정류회로)의 미완성 회로도를 나타낸 것이다. 이 회로도의 미완성 부분을 완성하고 이 정류회로에 $v(t)=220\\sqrt2\\sin120\\pi\\,t[V]$의 교류 전압이 입력되었을 때 출력 측 전압$(V_{DC}[V])$과 전류$(I_{DC}[A])$의 평균값을 구하시오. (단, 저항$(R)$은 $20[\\Omega]$이고, 변압기(TR)의 권수비는 1 : 1 이고, 직류 측에 평활회로(필터)가 없는 정류회로이다.) ",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "브리지 정류회로를 완성하시오.",
+          "imagePaths": "assets/images/2023_2_q4.png",
+          "answer": "",
+          "explanation": "",
+          "answerImagePaths": "assets/images/2023_2_a4.png",
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "출력 측 전압$(V_{DC}[V])$의 평균값을 구하시오.",
+          "imagePaths": null,
+          "answer": "$198[V]$",
+          "explanation": "$V_{DC}=0.9V=0.9\\cdot220=198[V]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "출력 측 전류$(I_{DC}[A])$의 평균값을 구하시오.",
+          "imagePaths": null,
+          "answer": "$9.9[A]$",
+          "explanation": "$I_{DC}=\\dfrac{V_{DC}}{R}=\\dfrac{198}{20}=9.9[A]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 5,
+      "type": "단답",
+      "questionText": "전기안전관리자의 직무에 관한 고시에서 전기안전관리자는 해당 사업장의 특성에 따라 점검종류에 따른 측정 주기 및 시험항목을 반영하여 전기설비의 일상점검$\\cdot$정기점검$\\cdot$정밀점검의 절차, 방법 및 기준에 대한 안전관리규정을 작성하고, 매년 점검 계획을 세워 점검을 실시해야 하며 그 결과를 기록해야 한다. 점검 실시에 따라 기록한 서류의 보존 및 제출에 대한 다음 사항에서 （ ）안에 들어갈 알맞은 숫자를 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": "가. 전기안전관리자는 점검 실시에 따라 기록한 서류（전자문서를 포함한다）를 전기설비 설치장소 또는 사업장마다 갖추어 두고, 그 기록서류를 （ ① ）년간 보존하여야 한다.\n나. 전기안전관리자는 정기검사 대상 전기설비의 정기검사 시 점검 실시에 따라 기록한 서류（전자문서를 포함한다）를 제출하여야 한다. 다만, 전기안전종합정보시스템에 매 월 （ ② ）회 이상 안전관리를 위한 확인 • 점검 결과 등을 입력한 경우에는 제출하지 아니할 수 있다.",
+      "subQuestions": null,
+      "answer": "(1): 4\n(2): 1",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 6,
+      "type": "부하 분담",
+      "questionText": "3300/220[V]인 두 개의 변압기 용량이 각각 250[kVA], 200[kVA]이고, %임피던스가 각각 2.7[%], 3[%]이다. 두 변압기를 병렬로 운전하고자 할 때 병렬 합성용량[kVA]을 구하시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "429.86[kVA]",
+      "explanation": "$\\dfrac{P_a}{P_b}=\\dfrac{P_A}{P_B}\\cdot\\dfrac{\\%\\,Z_B}{\\%\\,Z_A}=\\dfrac{250}{200}\\cdot\\dfrac{3}{2.7}=1.39$\n\n$P_b=\\dfrac{P_A}{1.39}=\\dfrac{250}{1.39}=179.86[kVA]$\n\n$P=P_a+P_b=250+179.86=429.86[kVA]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 7,
+      "type": "전선 굵기",
+      "questionText": "380[V], 4극 3상 유도 전동기 37[kW]의 분기회로 긍장이 50[m]일 때, 전압강하를 5[V] 이하로 하는데 필요한 전선의 굵기$[mm^2]$를 KSC IEC 전선규격에서 선정하시오.（단, 전동기의 전부하 전류는 75[A]이고, 3상 3선식의 회로이다.）",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$25[mm^2]$",
+      "explanation": "3상 3선식 회로에서의 전선의 단면적\n\n$A=\\dfrac{30.8\\,L\\,I}{1000\\,e}=\\dfrac{30.8\\cdot50\\cdot75}{1000\\cdot5}=23.1[mm^2]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 8,
+      "type": "시퀀스 제어",
+      "questionText": "유도전동기(M)를 현장의 동력제어반과 관리실의 원격조작반에서 기동 및 정지가 모두 가능하게 다음의 시퀀스 제어회로를 완성하시오. (단 회로 작성 시 선의 접속 및 미접속에 대한 예시를 참고하여 작성하시오.)",
+      "imagePaths": [ "assets/images/2023_2_q8.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": null,
+      "explanation": "ON 병렬접속, OFF 직렬접속",
+      "answerImagePaths": "assets/images/2023_2_a8.png",
+      "explanationImagePaths": "assets/images/2023_2_a8.png",
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 9,
+      "type": "기타",
+      "questionText": "상의 순서가 a-b-c인 불평형 3상 교류회로에서 대칭분$(영상분(I_0),정상분(I_1),역상분(I_2))$전류가 다음과 같을 때 각 상의 전류$(I_a[A],I_b[A],I_c[A])$를 구하시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "$a$상의 전류$(I_a)$",
+          "imagePaths": null,
+          "answer": "$7.27\\angle16.15^\\circ$",
+          "explanation": "$I_a=I_0+I_1+I_2$\n\n$=1.8\\angle-159.17^\\circ+8.95\\angle1.14^\\circ+2.5\\angle96.55^\\circ$\n\n$=7.27\\angle16.15^\\circ$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "$b$상의 전류$(I_b)$",
+          "imagePaths": null,
+          "answer": "$12.79\\angle-128.79^\\circ$",
+          "explanation": "$I_b=I_0+a^2\\,I_1+a\\,I_2$\n\n$=1.8\\angle-159.17^\\circ+1\\angle-120^\\circ\\cdot8.95\\angle1.14^\\circ+1\\angle120^\\circ\\cdot2.5\\angle96.55^\\circ$\n\n$=12.79\\angle-128.79^\\circ$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "$c$상의 전류$(I_c)$",
+          "imagePaths": null,
+          "answer": "$7.24\\angle123.69^\\circ$",
+          "explanation": "$I_c=I_0+a\\,I_1+a^2\\,I_2$\n\n$=1.8\\angle-159.17^\\circ+1\\angle120^\\circ\\cdot8.95\\angle1.14^\\circ+1\\angle-120^\\circ\\cdot2.5\\angle96.55^\\circ$\n\n$=7.24\\angle123.69^\\circ$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 10,
+      "type": "",
+      "questionText": "평형 3상 부하$(Z)$에 그림과 같이 접속된 전압계의 지시값이 $220[V]$, 전류계의 지시값이 $20[A]$, 전력계의 지시값이 $2[kW]$일 때 다음 각 물음에 답하시오.",
+      "imagePaths": [ "assets/images/2023_2_q10.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "부하$(Z)$의 소비전력은 몇 $[kW]$인지 구하시오.",
+          "imagePaths": null,
+          "answer": "$66[kW]$",
+          "explanation": "1상의 전력 $W=2[kW]$\n\n3상의 전력 $=3W=3\\cdot2=6$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "부하$(Z)$의 임피던스$[\\Omega]$를 복소수 형태로 구하시오.",
+          "imagePaths": null,
+          "answer": "$5+j3.92[\\Omega]$",
+          "explanation": "$R=\\dfrac{W}{I^2}=\\dfrac{2\\times10^3}{20^2}=5[\\Omega]$\n\n$Z=\\dfrac{E}{I}=\\dfrac{220/\\sqrt3}{20}=\\dfrac{11}{\\sqrt3}[\\Omega]$\n\n$X=\\sqrt{Z^2-R^2}=\\sqrt{\\left(\\dfrac{11}{\\sqrt3}\\right)^2-5^2}=3.92[\\Omega]$ ",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 11,
+      "type": "단락 사고",
+      "questionText": "그림과 같은 송전계통의 한 지점인 S에서 3상 단락사고가 발생하였다. 주어진 조건을 이용하여 다음 각 물음에 답하시오.",
+      "imagePaths": [ "assets/images/2023_2_q11.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "주어진 변압기(T2)의 %임피던스를 $10[MVA]$ 기준으로 환산하시오.",
+          "imagePaths": null,
+          "answer": "1차-2차 $4.8[\\%]$\n\n2차-3차 $6.4[\\%]$\n\n3차-1차 $9.5[\\%]$",
+          "explanation": "1차-2차 $:\\,\\%Z_{12}=\\dfrac{10}{25}\\cdot12=4.8[\\%]$\n\n2차-3차 $:\\,\\%Z_{23}=\\dfrac{10}{25}\\cdot16=6.4[\\%]$\n\n3차-1차 $:\\,\\%Z_{31}=\\dfrac{10}{10}\\cdot9.5=9.5[\\%]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "변압기(T2)의 1. 2, 3차 %임피던스를 구하시오.",
+          "imagePaths": null,
+          "answer": "1차 $:3.95[\\%]$\n2차 $:0.85[\\%]$\n3차 $:5.55[\\%]$",
+          "explanation": "$\\%Z_1=\\dfrac{4.8+9.5-6.4}{2}=3.95[\\%]$\n\n$\\%Z_2=\\dfrac{4.8+6.4-9.5}{2}=0.85[\\%]$\n\n$\\%Z_3=\\dfrac{9.5+6.4-4.8}{2}=5.55[\\%]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "고장점 S에서 본 전원측 %임피던스는 $10[MVA]$ 기준으로 얼마인지 구하시오.",
+          "imagePaths": null,
+          "answer": "$10.71[\\%]$",
+          "explanation": "발전기$\\quad\\%Z_G=\\dfrac{10}{50}\\cdot25=5[\\%]$\n\n변압기$\\quad\\%Z_T=\\dfrac{10}{50}\\cdot10=2[\\%]$\n\n송전선$\\quad\\%Z_l=\\dfrac{10}{10}\\cdot8=8[\\%]$\n\n조상기$\\quad\\%Z_C=\\dfrac{10}{10}\\cdot15=15[\\%]$\n\n발전기에서 T2 변압기 1차 $\\%Z_a=5+2+8+3.95=18.95[\\%]$\n\n조상기에서 T2 변압기 3차 $\\%Z_b=15+5.55=20.55[\\%]$\n\n$\\%Z=\\dfrac{\\%Z_a\\cdot\\%Z_b}{\\%Z_a+\\%Z_b}+\\%Z_T=\\dfrac{18.95\\cdot20.55}{18.95+20.55}+0.85=10.71[\\%]$ ",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "4)",
+          "questionText": "S점 단락사고 시의 용량은 몇 $[MVA]$인지 구하시오.",
+          "imagePaths": null,
+          "answer": "$93.37[MVA]$",
+          "explanation": "$P_S=\\dfrac{100}{\\%Z}\\,P_n=\\dfrac{100}{10.71}\\cdot10=93.37[MVA]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "5)",
+          "questionText": "고장점을 통과하는 단락전류는 몇 $[A]$인지 구하시오.",
+          "imagePaths": null,
+          "answer": "$700.10[A]$",
+          "explanation": "$I_S=\\dfrac{100}{\\%Z}\\,I_N=\\dfrac{100}{10.71}\\cdot\\dfrac{10\\times10^6}{\\sqrt{3}\\cdot77\\times10^3}=700.10[A]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": [
+        {
+          "기기명": "발전기(G)",
+          "용량$[kVA]$": "$50000$",
+          "전압$[kV]$": "$11$",
+          "%임피던스": "$25$"
+
+        },
+        {
+          "기기명": "변압기(T1)",
+          "용량$[kVA]$": "$50000$",
+          "전압$[kV]$": "$11/154$",
+          "%임피던스": "$10$"
+        },
+        {
+          "기기명": "송전선",
+          "용량$[kVA]$": "",
+          "전압$[kV]$": "$154$",
+          "%임피던스": "$8(10000[kVA]\\,기준)$"
+        },
+        {
+          "기기명": "변압기(T2)",
+          "용량$[kVA]$": "1차 $25000$",
+          "전압$[kV]$": "$154$",
+          "%임피던스": "$12(25000[kVA]\\,기준,\\,1차~2차)$"
+        },
+        {
+          "기기명": "변압기(T2)",
+          "용량$[kVA]$": "2차 $30000$",
+          "전압$[kV]$": "$77$",
+          "%임피던스": "$16(25000[kVA]\\,기준,\\,2차~3차)$"
+        },
+        {
+          "기기명": "변압기(T2)",
+          "용량$[kVA]$": "3차 $10000$",
+          "전압$[kV]$": "$11$",
+          "%임피던스": "$9.5(10000[kVA]\\,기준,\\,3차~1차)$"
+        },
+        {
+          "기기명": "조상기(C)",
+          "용량$[kVA]$": "$10000$",
+          "전압$[kV]$": "$11$",
+          "%임피던스": "$15$"
+        }
+      ],
+      "isKillerProblem": false
+    },
+    {
+      "number": 12,
+      "type": "중성점 접지",
+      "questionText": "1선 지락전류가 100[A]이고, 사용전압이 35[kV] 이하인 특고압 전로에 결합된 변압기 저압 측의 중성점 접지 저항의 최댓값$[\\Omega]$을 구하시오. (단, 혼촉 시 저압전로의 대지전 압이 150[V]를 초과하여 1초 초과 2초 이내에 특고압 전로를 자동으로 차단하는 장치를 설치한 경우이다.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$3[\\Omega]$",
+      "explanation": "$R=\\dfrac{300}{I_g}=\\dfrac{300}{100}=3[\\Omega]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 13,
+      "type": "논리 회로",
+      "questionText": "입력 A, B, C에 대한 출력 Y1, Y2를 다음의 진리표와 같이 동작시키고자 할 때 다음 각 물음에 답하시오. （단, 회로 작성 시 선의 접속 및 미접속에 대한 예시를 참고하여 작성하시오.）",
+      "imagePaths": [ "assets/images/2023_2_q13.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": " 출력 Y1. Y2의 간략화된 논리식을 각각 구하시오. (단, 간략화된 논리식은 최소한의 논리게이트 및 접점수 사용을 고려한 논리식이다.)",
+          "imagePaths": null,
+          "answer": "Y1 $=(A+\\overline{B})\\overline{C}$\n\nY2 $=B+\\overline{C}$",
+          "explanation": "Y1 $=\\overline{A}\\overline{B}\\overline{C}+A\\overline{B}\\overline{C}+AB\\overline{C}$\n\n$=\\overline{A}\\overline{B}\\overline{C}+A\\overline{B}\\overline{C}+AB\\overline{C}+A\\overline{B}\\overline{C}(\\because\\,A\\overline{B}\\overline{C}=A\\overline{B}\\overline{C}+A\\overline{B}\\overline{C})$\n\n$=\\overline{B}\\overline{C}(\\overline{A}+A)+A\\overline{C}(B+\\overline{B})$\n\n$=(A+\\overline{B})\\overline{C}$\n\nY2 $=\\overline{A}\\overline{B}\\overline{C}+\\overline{A}B\\overline{C}+\\overline{A}BC+A\\overline{B}\\overline{C}+AB\\overline{C}+ABC$\n\n$=\\overline{B}\\overline{C}(\\overline{A}+A)+B\\overline{C}(\\overline{A}+A)+BC(\\overline{A}+A)$\n\n$=\\overline{B}\\overline{C}+B+\\overline{C}+BC+B\\overline{C}(\\because\\,B\\overline{C}=B\\overline{C}+B\\overline{C})$\n\n$=\\overline{C}(\\overline{B}+B)+B(\\overline{C}+C)$\n\n$=B+\\overline{C}$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "“(1)”에서 구한 논리식을 논리회로로 작성하시오.",
+          "imagePaths": null,
+          "answer": "",
+          "explanation": "",
+          "answerImagePaths": [ "assets/images/2023_2_a132.png" ],
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "“(1)”에서 구한 논리식을 유접점 시퀀스회로로 작성하시오.",
+          "imagePaths": null,
+          "answer": "",
+          "explanation": "",
+          "answerImagePaths": [ "assets/images/2023_2_a13_3.png" ],
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 14,
+      "type": "변류기",
+      "questionText": "3상 3선식 고압의 수전설비에서 그림과 같이 접속된 변류기의 2차 전류가 2[A]일 때 변류기 1차 측에 흐르는 전류의 크기는 몇 [A]인지 계산하시오.(단, 변류기의 변류비는 50/5 이다.)",
+      "imagePaths": [ "assets/images/2023_2_q14.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$11.55[A]$",
+      "explanation": "CT 1차측 전류 = 전류계 지시치$\\cdot\\dfrac{1}{\\sqrt3]\\cdot$변류비\n\n$=2\\cdot\\dfrac{1}{\\sqrt3}\\cdot\\dfrac{50}{5}=11.55[A]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 15,
+      "type": "단답",
+      "questionText": "다음은 한국전기설비규정에서 정하는 고압 및 특고압 전로에서 피뢰기를 시설해야 하는 장소를 나타낸 것이다. (   )에 알맞은 내용을 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": "1. 고압 및 특고압의 전로 중 다음에 열거하는 곳 또는 이에 근접한 곳에는 피뢰기를 시설하여야 한다.\n가. ( 1 )의 가공전선 인입구 및 인출구\n나 .( 2 )에 접속하는 ( 3 ) 변압기의 고압측 및 특고압측\n다. 고압 및 특고압 가공전선로로부터 공급을 받는 ( 4 )의 인입구\n라. 가공전선로와 ( 5 )가 접속되는 곳\n\n2. 다음의 어느 하나에 해당하는 경우에는 제1 의 규정에 의하지 아니할 수 있다.\n가. 제1 의 어느 하나에 해당되는 곳에 직접 접속하는 전선이 짧은 경우\n나. 제1 의 어느 하나에 해당되는 경우 피보호기기가 보호범위 내에 위치하는 경우",
+      "subQuestions": [],
+      "answer": " 1 :발전소$\\cdot$변전소 또는 이에 준하는 장소\n 2 :특고압 가공전선로\n 3 :배전용\n 4 :수용장소\n 5 :지중전선로",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 16,
+      "type": "기타",
+      "questionText": "그림은 접지계통 중 TN-S 계통으로 계통 내에 별도의 중성선(N)과 보호도체(PE)가 있는 접지방식에 대한 미완성 계통도를 나타낸 것이다. TN-S 접지계통을 완성하시오. \n(단, 계통도 작성 시 선의 접속 및 미접속에 대한 예시를 참고하여 작성하시오.)",
+      "imagePaths": [ "assets/images/2023_2_q16.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "",
+      "explanation": "",
+      "answerImagePaths": [ "assets/images/2023_2_a16.png" ],
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 17,
+      "type": "부하 설비",
+      "questionText": "설비용량이 10[kW]인 수용가 A와 수용가 B의 부하 곡선이 각각 다음과 같을 때에 대한 다음 각 물음에 답하시오.",
+      "imagePaths": [ "assets/images/2023_2_q17.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "수용가 A와 수용가 B의 수용률을 구하시오.",
+          "imagePaths": null,
+          "answer": "A : 80[%]\nB : 60[%]",
+          "explanation": "$A=\\dfrac{8}{10}\\cdot100=80[\\%]$\n\n$B=\\dfrac{6}{10}\\cdot100=60[\\%]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "수용가 A와 수용가 B의 부하율을 구하시오.",
+          "imagePaths": null,
+          "answer": "A : 56.25[%]\nB : 58.33[%]",
+          "explanation": "$A=\\dfrac{(2+6+8+2)\\cdot6}{8\\cdot24}\\cdot100=56.25[\\%]$\n\n$B=\\dfrac{(2+4+2+6)\\cdot6}{6\\cdot24}\\cdot100=58.33[\\%]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "수용가 A와 B 사이의 부등률을 구하시오.",
+          "imagePaths": null,
+          "answer": "1.4",
+          "explanation": "부등률 $=\\dfrac{개별\\,최대수용전력의\\,합}{합성\\,최대\\,수용전력}=\\dfrac{8+6}{10}=1.4$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 18,
+      "type": "조명설비",
+      "questionText": "광원으로부터 원추의 밑면까지의 거리가 $r= 4[m]$이고, 밑면의 반지름이 $a=3[m]$인 원형면의 평균 조도가 $100[lx]$라면, 이 점광원의 평균 광도를 구하시오.",
+      "imagePaths": [ "assets/images/2023_2_q18.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "2250[cd]",
+      "explanation": "조도 $E=\\dfrac{F}{S}=\\dfrac{2\\pi(1-\\cos\\theta)I}{\\pi\\,a^2}=\\dfrac{2(1-\\cos\\theta)I}{a^2}$\n\n평균 광도 $I=\\dfrac{E\\cdot\\,a^2}{2(1-\\cos\\theta)}=\\dfrac{100\\cdot3^2}{2\\cdot(1-0.8)}=2250[cd]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    }
+  ]
+}

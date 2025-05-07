@@ -1,0 +1,435 @@
+﻿{
+  "year": 2023,
+  "session": 3,
+  "questions": [
+    {
+      "number": 1,
+      "type": "절연 내력",
+      "questionText": "현장에서 시험용 변압기가 없을 경우 그림과 같이 주상 변압기 2대와 수저항기를 사용하여 변압기의 절연내력 시험을 할 수 있다. 이 때 다음 각 물음에 답하시오. 단, 최대 사용 전압 $6900[V]$의 변압기의 권선을 시험할 경우이며, $\\dfrac{E_2}{E_1}=105/6300[V]$ 임",
+      "imagePaths": [ "assets/images/2023_3_q1.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "절연내력시험전압은 몇 [V]이며, 이 시험전압을 몇 분간 가하여 이에 견디어야 하는가?",
+          "imagePaths": null,
+          "answer": "절연내력시험전압 $V=6900\\cdot1.5=10350[V]$\n\n가하는 시간 : 10분",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "시험시 전압계 V로 측정되는 전압은 몇 [V]인가?",
+          "imagePaths": null,
+          "answer": "$86.25[V]$",
+          "explanation": "$V=10350\\cdot\\dfrac{1}{2}\\cdot\\dfrac{105}{6300}=86.25$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "도면에서 오른쪽 하단의 접지되어 있는 전류계는 어떤 용도로 사용되는가?",
+          "imagePaths": null,
+          "answer": "누설 전류의 측정",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 2,
+      "type": "단답",
+      "questionText": "연료전지(fuel cell)의 특징을 3가지만 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "에너지 변환효율이 높다.\n\n단위 출력당의 용적 또는 무게가 작다.\n\n환경상의 문제가 없다.",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 3,
+      "type": "단답",
+      "questionText": "다음은 단락보호장치의 설치위치에 대한 내용이다. 설명으로 보고 괄호에 알맞은 숫자를 쓰시오.",
+      "imagePaths": [ "assets/images/2023_3_q3.png" ],
+      "supplementaryInfo": "단락전류 보호장치는 분기점(O)에 설치해야 한다. 다만, 아래 그림과 같이 분기회로의 단락보호장치 설치점(B)과 분기점(0) 사이에 다른 분기회로 또는 콘센트의 접속이 없고 단락, 화재 및 인체에 대한 위험이 최소화될 경우, 분기회로의 단락 보호장치 $P_2$는 분기점(0)으로 부터 ( ① ) [m]까지 이동하여 설치할 수 있다.",
+      "subQuestions": [],
+      "answer": "3",
+      "explanation": "KEC 212.5.1 단락보호장치의 설치위치\n\n1. 설치위치\n단락전류 보호장치는 분기점(O)에 설치해야 한다.\n2. 설치위치의 예외\n가. 분기회로의 단락보호장치 설치점(B)과 분기점(O) 사이에 다른 분기회로 또는 콘센트의 접속이 없고 단락, 화재 및 인체에 대한 위험이 최소화될 경우, 분기 회로의 단락 보호장치 아는 분기점(O)으로 부터 3[m]까지 이동하여 설치할 수 있다.\n나. 분기 회로의 시작점 (0)과 이 분기 회로의 단락보호장치$(P_2)$사이에 있는 도체가 전원측에 설치되는 보호장치$(P_1)$에 의해 단락보호가 되는 경우에, $P_2$의 설치위치는 분기점(0)로부터 거리제한이 없이 설치할 수 있다.",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 4,
+      "type": "소선",
+      "questionText": "소선의 직경이 $3.2[mm]$인 37가닥 연선의 외경은 몇 $[mm]$ 인지 구하시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$22.4[mm]$",
+      "explanation": "소선의 총수 $N=3n(n+1)+1=37$\n\n$n=3$연선의 바깥지름 $D=(2n+1)d=(2\\cdot3+1)\\cdot3.2=22.4[mm]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 5,
+      "type": "단답",
+      "questionText": "다음은 수변전설비에 사용되는 차단기 트립방식의 설명이다. 빈칸에 알맞은 방식을 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": "( 1 ) 고장 시 변류기 2차 전류에 의해 트립되는 방식\n\n( 2 ) 고장 시 콘덴서의 충전전하에 의해 트립되는 방식\n\n( 3 ) 고장 시 전압의 저하에 의해 트립되는 방식",
+      "subQuestions": null,
+      "answer": "1) 과전류 트립 방식\n\n2) 콘덴서 트립 방식\n\n3) 부족 전압 트립 방식",
+      "explanation": "1) 직류 전압트립 방식 : 별도로 설치된 축전지 등의 제어용 직류 전원의 에너지에 의하여 트립되는 방식\n\n2) 과전류 트립 방식 : 차단기의 주회로에 접속된 변류기의 2차 전류에 의하여 차단기가 트립되는 방식\n\n3) 콘덴서 트립 방식 : 충전된 콘덴서의 에너지에 의하여 트립되는 방식\n\n4) 부족 전압 트립 방식 : 부족 전압 트립 장치에 인가되어 있는 전압의 저하에 의하여 차단기가 트립되는 방식",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 6,
+      "type": "부하 분담",
+      "questionText": "$6600/220[V]$인 두 대의 단상 변압기 A, B가 있다. A의 용량은 $30[kVA]$로서 2차로 환산한 저항과 리액턴스의 값은 $R_A=0.03[\\Omega],\\,X_A=0.04[\\Omega]$이고, B의 용량은 $20[kVA]$로서 2차로 환산한 값은 $R_B=0.03[\\Omega],\\,X_B=0.06[\\Omega]$이다. 이 두 변압기를 병렬 운전해서 $40[kVA]$의 부하를 건 경우, A기의 분담 부하$[kVA]$를 구하시오. ",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$22.91[kVA]$",
+      "explanation": "$\\%Z_A=\\dfrac{P_A\\,Z_{21}}{10V_2^{2}}=\\dfrac{30\\cdot\\sqrt{0.03^2+0.04^2}}{10\\cdot0.22^2}=3.1[\\%]$\n\n$\\%Z_B=\\dfrac{P_B\\,Z_{21}}{10V_2^{2}}=\\dfrac{20\\cdot\\sqrt{0.03^2+0.06^2}}{10\\cdot0.22^2}=2.77[\\%]$\n\n$\\dfrac{P_a}{P_b}=\\dfrac{P_A}{P_B}\\times\\dfrac{\\%Z_B}{\\%Z_A}=\\dfrac{30}{20}\\cdot\\dfrac{2.77}{3.1}=1.34$\n\n$P_a+P_b=40[kVA]\\quad\\,P_a=40-P_b$\n\n$\\dfrac{40-P_b}{P_b}=1.34\\quad\\,P_b=\\dfrac{40}{2.34}=17.09[kVA]$\n\n$P_a=40-P_b=40-17.09=22.91[kVA]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 7,
+      "type": "부하 설비",
+      "questionText": "어떤 공장이 $220[V],\\,11[kW]$인 3상 유도전동기를 부하설비로 사용할 때, 다음 각 물음에 답하시오. (단, 1 일 사용전력량은 $192[kWh]$, 1 일 최대전력은 $12[kW]$, 최대전력일 때의 전류는 $34[A]$이다.)",
+      "imagePaths": [ "assets/images/2023_3_q1.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "일 부하율은 몇 [%]인지 구하시오.",
+          "imagePaths": null,
+          "answer": "66.67[%]",
+          "explanation": "일 부하율 $=\\dfrac{평균\\,수용\\,전력}{최대\\,수용\\,전력}\\times100[\\%]=\\dfrac{192/24}{12}\\times100=66.67[\\%]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "최대전력일 때의 역률[%]을 구하시오.",
+          "imagePaths": null,
+          "answer": "92.62[%]",
+          "explanation": "$\\cos\\theta=\\dfrac{P}{\\sqrt3VI}=\\dfrac{12\\times10^3}{\\sqrt3\\cdot220\\cdot34}\\times100=92.62[\\%]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 8,
+      "type": "차단 용량",
+      "questionText": " 단락전류가 $24[kA]$인 계통에 사용되는 정격전압 $170[kV]$ 차단기의 차단 용량$[MVA]$을 선정하시오.",
+      "imagePaths": null,
+      "supplementaryInfo": "(차단기의 표준 차단용량[MVA])   3600   5800   7300   9200   12000",
+      "subQuestions": [],
+      "answer": "$7300[MVA]$",
+      "explanation": "$P_s=\\sqrt3V_{n}I_{s}=\\sqrt3\\cdot170\\cdot24=7066.77[MVA]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 9,
+      "type": "단답",
+      "questionText": "동일 용량의 단상 변압기를 V결선하여 3상으로 사용하는 경우 △결선과 비교했을 때 출력비는 몇 [%]인지와 V결선한 변압기 1대당 이용률은 몇 [%]인지 각각 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "출력비 : 57.7[%]\n이용률 : 86.6[%]",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 10,
+      "type": "단답",
+      "questionText": "다음은 한국전기설비규정(KEC)에서 과전류 보호에 대한 내용이다. 괄호 안에 알맞은 내용을 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": "[회로의 특성에 따른 요구사항]\n\n중성선을 ( 1 ) 및 ( 2 )하는 회로의 경우에 설치하는 개폐기 및 차단기는 ( 1 )에는 중성선이 선도체보다 늦게 ( 1 )되어야 하며, ( 2 ) 시에는 선도체와 동시 또는 그 이전 에 ( 2 ) 되는 것을 설치하여야 한다.",
+      "subQuestions": [],
+      "answer": "1) 차단\n\n2) 재폐로",
+      "explanation": "KEC 212.2.3 \n\n중성선의 차단 및 재폐로중성선을 차단 및 재폐로하는 회로의 경우에 설치하는 개폐기 및 차단기는 차단 시에는 중성선이 선도체보다 늦게 차단되어야 하며, 재폐로 시에는 선도체와 동시 또는 그 이전에 재폐로 되는 것을 설치하여야 한다.",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 11,
+      "type": "단답",
+      "questionText": "차단기는 고장 시에 발생하는 대전류를 신속하게 차단하여 고장구간을 건전구간으로부터 분리시킨다. 다음 차단기의 약호에 해당하는 명칭을 쓰시오.\n(예시 — ELB : 누전차단기)",
+      "imagePaths": null,
+      "supplementaryInfo": "OCB :         ABB :\n\nGCB :         MBB :",
+      "subQuestions": [],
+      "answer": "OCB : 유입차단기\nABB : 공기차단기\nGCB : 가스차단기\nMBB : 자기차단기",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 12,
+      "type": "논리 회로",
+      "questionText": "다음 논리 회로를 보고 진리표를 완성하시오. (단, L → Low, H — High 이다.)",
+      "imagePaths": [ "assets/images/2023_3_q12.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": null,
+      "explanation": "$Z=AB+C$",
+      "answerImagePaths": [ "assets/images/2023_3_a12.png" ],
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 13,
+      "type": "단답",
+      "questionText": "동기발전기를 병렬운전하려고 한다. 병렬운전이 가능한 조건 4가지를 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "기전력의 크기가 같을 것\n기전력의 위상이 같을 것\n기전력의 파형이 같을 것\n기전력의 주파수가 같을 것",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 14,
+      "type": "시퀀스 제어",
+      "questionText": "그림은 전자개폐기 MC에 의한 시퀀스 회로를 개략적으로 그린 것이다. 이 그림을 보고 다음 각 물음에 답하시오.",
+      "imagePaths": [ "assets/images/2023_3_q14.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "그림과 같은 회로를 전자개폐기 MC의 보조접점을 사용하여 자기유지가 될 수 있는 일반적인 시퀀스 회로로 예시 2가지를 참고하여 그리시오.",
+          "imagePaths": [ "assets/images/2023_3_q14_1.png" ],
+          "answer": "",
+          "explanation": "",
+          "answerImagePaths": ["assets/images/2023_3_a14_1.png" ],
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "시간$T_3$에 열동계전기가 작동하고, 시간$T_4$에서 수동으로 복귀하였다. 이때의 MC의 동작을 타임차트로 표시하시오. (단, 열동계전기는 평상 시 도통 상태로 간주한다.)",
+          "imagePaths": [ "assets/images/2023_3_q14_2.png" ],
+          "answer": "",
+          "explanation": "",
+          "answerImagePaths": ["assets/images/2023_3_a14_2.png" ],
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 15,
+      "type": "단답",
+      "questionText": "진공차단기(VCB)의 특징을 3가지만 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "소형 경량이다.\n고속도 개폐가 가능하고 차단성능이 우수하다.\n불연성, 저소음으로 수명이 길다.",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 16,
+      "type": "부하 설비",
+      "questionText": "다음과 같은 전기설비에 공급해야 할 변압기의 용량을 구하고, 변압기 표준용량에서 선정하시오.\n(변압기 표준 용량[kVA] : 50, 75, 100, 150, 200, 300)",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$100[kVA]$",
+      "explanation": "전등용 설비용량 $=\\dfrac{60\\cdot0.8}{0.95}=50.53[kVA]$\n\n전열용 설비용량$=\\dfrac{40\\cdot0.5}{0.9}=22.22[kVA]$\n\n동력용 설비용량$=\\dfrac{70\\cdot0.4}{1.4\\cdot0.9}=22.22[kVA]$\n\n총 설비용량$=50.53+22.22+22.22=94.97[kVA]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": [
+        {
+          "부하의 종류": "전등용 설비",
+          "출력[kW]": "60",
+          "수용률[%]": "80",
+          "부등률": "-",
+          "역률[%]": "95"
+        },
+        {
+          "부하의 종류": "전열용 설비",
+          "출력[kW]": "40",
+          "수용률[%]": "50",
+          "부등률": "-",
+          "역률[%]": "90"
+        },
+        {
+          "부하의 종류": "동력용 설비",
+          "출력[kW]": "70",
+          "수용률[%]": "40",
+          "부등률": "1.4",
+          "역률[%]": "90"
+        }
+      ],
+      "isKillerProblem": false
+    },
+    {
+      "number": 17,
+      "type": "수변전 설비",
+      "questionText": "345 [kV] 변전소의 단선도와 변전소에 사용되는 주요 제원을 이용하여 다음 각 물음에 답하시오.",
+      "imagePaths": [ "assets/images/2023_3_q17.png" ],
+      "supplementaryInfo": "[주변압기]\n\n단권변압기 $345[kV]∕154[kV]∕23[kV](Y -Y -\\Delta)$\n$166.7[MVA]\\times3대\\fallingdotseq500[MVA]$,OLTC부\n%임피던스$(500[MVA]\\,기준):1차-2차:10[\\%],1차-3차:78[\\%],2차-3차:67[\\%]$\n\n\n[차단기]\n\n362[kV] GCB 25[GVA] 4000[A]~2000[A]\n170[kV] GCB 15[GVA] 4000[A]~2000[A]\n25.8[kV] VCB(   )[MVA] 2500[A]~1200[A]\n\n\n[단로기]\n\n362[kV] DS 4000[A]~2000[A]\n170[kV] DS 4000[A]~2000[A]\n25.8[kV] DS 2500[A]~1200[A]\n\n\n[피뢰기]\n\n288[kV] LA 10[kA]\n144[kV] LA 10[kA]\n21[kV] LA 10[kA]\n\n\n[분로 리액터]\n\n23[kV] Sh.R 30[MVAR]\n\n\n[주모선]\n\nAI - Tube $200\\phi$",
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "도면의 345 [kV]측 모선 방식은 어떤 모선 방식인지 쓰시오.",
+          "imagePaths": null,
+          "answer": "2중 모선방식",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "도면에서 ①번 기기의 설치 목적은 무엇인가?",
+          "imagePaths": null,
+          "answer": "페란티 현상 방지",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "도면에 주어진 제원을 참조하여 주변압기에 대한 등가 %임피던스$(\\%Z_H,\\%Z_M,\\%Z_L)$를 구하고, ②번 23 [kV] VCB의 차단용량을 구하시오. (단, 그림과 같은 임피던스 회로는 100[MVA] 기준이다.)",
+          "imagePaths": [ "assets/images/2023_3_q17_3.png" ],
+          "answer": "등가 %임피던스 :\n$Z_H=2.1[\\%]$\n$\\%Z_M=-0.1[\\%]$\n$\\%Z_L=13.5[\\%]$\n\n23[kV]VCB 차단용량\n$716.33[MVA]$",
+          "explanation": "등가 %임피던스 :\n500[MVA]기준\n1차~2차 $\\%Z_{HM}=10[\\%]$\n2차~3차 $\\%Z_{ML}=67[\\%]$\n1차~3차 $\\%Z_{HL}=78[\\%]$\n100[MVA] 기준\n$\\%Z_{HM}=10\\cdot\\dfrac{100}{500}=2[\\%]$\n\n$\\%Z_{ML}=67\\cdot\\dfrac{100}{500}=13.4[\\%]$\n\n$\\%Z_{HL}=78\\cdot\\dfrac{100}{500}=15.6[%]$\n\n$\\%Z_H=\\dfrac{1}{2}(\\%Z_{HM}+\\%Z_{HL}-\\%Z_{ML})=\\dfrac{1}{2}(2+15.6-13.4)=2.1[\\%]$\n\n$\\%Z_M=\\dfrac{1}{2}(\\%Z_{HM}+\\%Z_{ML}-\\%Z_{HL})=\\dfrac{1}{2}(2+13.4-15.6)=-0.1[\\%]$\n\n$\\%Z_L=\\dfrac{1}{2}(\\%Z_{HL}+\\%Z_{ML}-\\%Z_{HM})=\\dfrac{1}{2}(15.6+13.4-2)=13.5[\\%]$\n\n\n23[kV]VCB 차단용량\n\n$\\%Z=13.5+\\dfrac{(2.1+0.4)(-0.1+0.67)}{(2.1+0.4)+(-0.1+0.67)}=13.96[\\%]$\n\n$\\therefore\\,P_S=\\dfrac{100}{\\%Z}P_n=\\dfrac{100}{13.96}\\times100=716.33[MVA]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "4)",
+          "questionText": "도면의 345[kV] GCB에 내장된 계전기용 BCT의 오차계급은 C800이다. 부담은 몇 [VA]인지 구하시오.",
+          "imagePaths": null,
+          "answer": "200[VA]",
+          "explanation": "오차 계급 C800에서 임피던스는 $8[\\Omega]$\n\n부담 : $I^2R=5^2\\cdot8=200[VA]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "5)",
+          "questionText": "도면의 ③번 차단기의 설치 목적을 설명하시오.",
+          "imagePaths": null,
+          "answer": "무정전으로 점검하기 위해",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "6)",
+          "questionText": "주변압기 1 Bank(단상×3대)을 증설하여 병렬 운전시키고자 한다. 이때 병렬 운전 을 할 수 있는 조건 4가지를 쓰시오.",
+          "imagePaths": null,
+          "answer": "극성이 같을 것\n정격 전압(전압비)이 같을 것\n%임피던스가 같을 것\n내부 저항과 누설 리액턴스 비가 같을 것",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 18,
+      "type": "",
+      "questionText": "22.9[kV-Y] 중성선 다중접지 전선로에 정격전압 13.2[kV], 정격용량 25O[kVA]의 단상 변압기 3대를 이용하여 아래 그림과 같이 Y-△결선 하고자 한다. 다음 각 물음에 답하시오.",
+      "imagePaths": [ "assets/images/2023_3_q18.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "변압기 1차측 Y결선의 중성점(※ 부분)을 전선로 N선에 연결하여야 하는지 여부와 그 이유를 설명하시오.",
+          "imagePaths": null,
+          "answer": "연결해서는 안된다.\n\n중성점이 전선로 N선에 연결되어 있는 경우, 임의의 한 상 결상 시 나머지 2대의 변압기가 역V 결선되므로 과부하로 인한 소손이 발생할 수 있다.",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "PF에 끼워 넣을 퓨즈 링크는 몇 [A]의 것을 선정하는 것이 좋은지, 계산과정을 쓰고 아래 예시에서 퓨즈 용량을 선정하시오.\n(단, 퓨즈는 전부하 전류의 1.25배로 계산한다.)\n[퓨즈 정격 용량[A] 1 3 5 10 15 20 30 40 50 60 75 100]",
+          "imagePaths": null,
+          "answer": "30[A]",
+          "explanation": "전부하 전류 $I=\\dfrac{750}{\\sqrt3\\cdot22.9}=18.91[A]$\n$\\therefore\\,퓨즈용량=18.91\\cdot1.25=23.64[A]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    }
+  ]
+}

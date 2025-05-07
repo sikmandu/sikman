@@ -1,0 +1,518 @@
+﻿{
+  "year": 2024,
+  "session": 1,
+  "questions": [
+    {
+      "number": 1,
+      "type": "수변전 설비",
+      "questionText": "도면은 어느 154 [kV] 수용가의 수전 설비 단선 결선도의 일부분이다. 주어진 표와 도면을 이용하여 다음 각 물음에 답하시오.\n(1차 정격 전류[A] : 200  400  600  800  1200  1500)\n(2차 정격 전류  5)\n(변압기의 표준용량[MVA]  15, 20, 25, 30, 40, 50, 60, 80, 100)",
+      "imagePaths": [ "assets/images/2023_3_q1.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "변압기 2차 부하 설비 용량이 51 [MW], 수용률이 70 [%], 부하역률이 90 [%]일 때 도면의 변압기 표준용량[MVA]을 선정하시오.\n(단, 변압기 정격을 참고하여 선정하고, 기타 조건은 무시한다.)",
+          "imagePaths": null,
+          "answer": "40[MVA]",
+          "explanation": "변압기 용량 $=\\dfrac{설비용량[MW]\\cdot수용률}{역률}=\\dfrac{51\\cdot0.7}{0.9}=39.67[MVA]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "변압기 1 차측 DS의 정격전압을[kV]을 쓰시오.",
+          "imagePaths": null,
+          "answer": "170[kV]",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "CT1 의 비는 얼마인지를 계산하고 표에서 선정하시오.\n(단, “(1)”항에서 선정한 변압기 표준용량을 참고하고, 변류기 정격전류 산정 시 여유율은 1.25로 한다.)",
+          "imagePaths": null,
+          "answer": "200/5",
+          "explanation": "$CT_1$ 1차 전류$=\\dfrac{40\\times10^6}{\\sqrt3\\cdot154\\times10^3}=149.96[A]$\n$149.96\\cdot1.25=187.45[A]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "4)",
+          "questionText": "VCB의 정격 차단전류가 23[kA]일 때 차단기의 차단용량[MVA]을 구하시오.",
+          "imagePaths": null,
+          "answer": "1027.8[MVA]",
+          "explanation": "$\\sqrt3\\cdot차단기의\\,정격전압[kV]\\cdot차단기의\\,정격차단전류[kA]$\n$=\\sqrt3\\cdot25.8\\cdot23=1027.8[MVA]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "5)",
+          "questionText": "과전류 계전기의 정격부담이 9[VA]일 때 이 계전기의 임피던스[Ω]를 구하시오.",
+          "imagePaths": null,
+          "answer": "$0.36[\\Omega]$",
+          "explanation": "$P=I^2Z$\n\n$Z=\\dfrac{P}{I^2}=\\dfrac{9}{5^2}=0.36[\\Omega]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "6)",
+          "questionText": "$CT_7$의 1차 전류가 600[A]일 때 $CT_7$의 2차에서 비율 차동 계전기의 단자에 흐르는 전류[A]를 구하시오. (단, 위상보정이 되지 않는 비율차동계전기이며, 변류기 결선에 의하여 위상을 보정한다.)",
+          "imagePaths": null,
+          "answer": "4.33[A]",
+          "explanation": "$I_2=600\\cdot\\dfrac{5}{1200}\\cdot\\sqrt3=4.33[A]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 2,
+      "type": "단답",
+      "questionText": "한국전기설비규정에 따른 욕실 또는 화장실 등 인체가 물에 젖어있는 상태에서 전기를 사용하는 장소에 콘센트를 시설하는 경우에 설치해야 하는 인체감전보호용 누전차단기의 정격감도전류［mA］와 동작시간［초］은 얼마 이하를 사용하는지 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "정격감도전류[mA] : 15\n동작시간[초] : 0.03",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 3,
+      "type": "단답",
+      "questionText": "사용 중인 UPS의 2차 측에 단락사고 등이 발생 했을 경우 UPS와 고장 회로를 분리하는 방식 3가지를 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "배선용차단기에 의한 방식\n반도체차단기에 의한 방식\n속단퓨즈에 의한 방식",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 4,
+      "type": "부하 설비",
+      "questionText": "어느 빌딩의 수전설비를 계획하려고 한다. 이 빌딩의 예측되는 부하밀도는 조명 $20[VA∕m^2]$, 일반동력 $35[VA∕m^2]$, 냉방 $40[VA/m^2]$ 이다. 이 빌딩의 연면적이 $70000[m^2]$일 때, 부하설비용량[kVA]을 구하시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "6650[kVA]",
+      "explanation": "부하 설비 용량[kVA]\n$=부하밀도[VA/m^2]\\cdot연면적[m^2]\\times10^{-3}$\n\n$=(20+35+40)\\cdot70000\\times10^{-3}=6650[kVA]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 5,
+      "type": "부하 설비",
+      "questionText": "계약부하 설비에 의한 계약최대 전력을 정하는 경우에 부하설비 용량이 900 [kW]이면 전력회사와의 계약 최대전력[kW]을 구하시오.\n(단, 계약최대전력 환산표는 다음과 같다.)\n[계산의 합계치 단수가 1 [kW] 미만일 경우에는 소수점 이하 첫째 자리에 4사 5입합니다.]",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "604[kW]",
+      "explanation": "$75+75\\cdot0.85+75\\cdot0.75+75\\cdot0.65+600\\cdot0.6=603.75[kW]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": [
+        {
+          "구분": "처음 75[kW]에 대하여",
+          "승률[%]": "100"
+        },
+        {
+          "구분": "다음 75[kW]에 대하여",
+          "승률[%]": "85"
+        },
+        {
+          "구분": "다음 75[kW]에 대하여",
+          "승률[%]": "75"
+        },
+        {
+          "구분": "다음 75[kW]에 대하여",
+          "승률[%]": "65"
+        },
+        {
+          "구분": "300[kW] 초과분에 대하여",
+          "승률[%]": "60"
+        }],
+      "isKillerProblem": false
+    },
+    {
+      "number": 6,
+      "type": "단답",
+      "questionText": "다음과 같이 주어진 계전기에 대한 한글 명칭을 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "OCR : 과전류계전기\nGR : 지락계전기\nOPR : 결상계전기\nOVR : 과전압계전기\nPWR : 전력계전기",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": [
+        {
+          "약호": "OCR",
+          "명칭": "       "
+        },
+        {
+          "약호": "GR",
+          "명칭": "       "
+        },
+        {
+          "약호": "OPR",
+          "명칭": "       "
+        },
+        {
+          "약호": "OVR",
+          "명칭": "       "
+        },
+        {
+          "약호": "PWR",
+          "명칭": "       "
+        }],
+      "isKillerProblem": false
+    },
+    {
+      "number": 7,
+      "type": "축전지",
+      "questionText": "연축전지의 정격 용량 200[Ah]. 상시 부하 10[kW], 표준전압 100[V]인 부동 충전 방식이 있다. 이 부동 충전 방식에서 충전기 2차 전류는 몇 [A]인가?",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "120[A]",
+      "explanation": "부동 충전방식 충전기 2차전류 $=\\dfrac{축전기\\,정격용량[Ah]}{정격\\,방전율[h]}+\\dfrac{상시\\,부하용량[VA]}{표준\\,전압[V]}$\n\n$\\therefore\\,I=\\dfrac{200}{10}+\\dfrac{10\\times10^3}{100}=120[A]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 8,
+      "type": "기타",
+      "questionText": "단상변압기의 변압비는 각각 3500∕100[V]로 같으며, 고압측을 그림과 같이 직렬로 5500[V]로 연결하고, 저압측에 각각 3[Ω], 5[Ω]의 저항을 접속하였을 때, 고압측의 단자전압 $E_1[V]$과 $E_2[V]$를 구하시오.",
+      "imagePaths": [ "assets/images/2024_1_q8.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$E_1=2062.5[V]$\n\n$E_2=3437.5[V]$",
+      "explanation": "$E_1=\\dfrac{R_1}{R_1+R_2}\\cdot\\,E=\\dfrac{3}{3+5}\\cdot5500=2062.5[V]$\n\n$E_2=\\dfrac{R_2}{R_1+R_2}\\cdot\\,E=\\dfrac{5}{3+5}\\cdot5500=3437.5[V]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 9,
+      "type": "단답",
+      "questionText": "전력시설물 공사감리업무 수행지침에 따라 전기공사업자는 해당 공사현장에서 공사업무 수행 상 필요한 서식을 비치하고 기록 • 보관하여야 한다. 이에 해당하는 서식을 5가지만 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "하도급 현황\n작업계획서\n기자재 공급원 승인현황\n주요인력 및 장비투입 현황\n주간공정계획 및 실적보고서",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 10,
+      "type": "시퀀스 제어",
+      "questionText": "전동기를 현장과 사무실에서 각각 기동 및 정지하려고 한다. 시퀀스 제어 회로를 보고 미완성된 시퀀스 도면을 완성하시오. （단, ON, OFF 스위치를 각각 한 번씩만 사용한다.）",
+      "imagePaths": [ "assets/images/2024_1_q10.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": null,
+      "explanation": "ON 병렬접속, OFF 직렬 접속",
+      "answerImagePaths": [ "assets/images/2024_1_a10.png" ],
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 11,
+      "type": "시퀀스 제어",
+      "questionText": "그림은 PLC 래더도를 프로그램으로 변환하여 나타낸 것이다. 프로그램상의 빈칸을 채우시오.",
+      "imagePaths": [ "assets/images/2024_1_q11.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "(1) : S  (2) : M000 (3) : OS  (4) : W\n(5) : S  (6) : M001  (7) : O  (8) : END",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": [
+        {
+          "순서": "0",
+          "연산자 ": "S",
+          "주소": "P000",
+          "순서": "7",
+          "연산자": "W",
+          "주소": "M001"
+           
+        },
+        {
+          "순서": "1",
+          "연산자 ": "AN",
+          "주소": "P010",
+          "순서": "8",
+          "연산자": "(5)",
+          "주소": "(6)"
+        },
+        {
+          "순서": "2",
+          "연산자 ": "(1)",
+          "주소": "(2)",
+          "순서": "9",
+          "연산자": "A",
+          "주소": "P002"
+        },
+        {
+          "순서": "3",
+          "연산자 ": "A",
+          "주소": "M001",
+          "순서": "10",
+          "연산자": "(7)",
+          "주소": "P011"
+        },
+        {
+          "순서": "4",
+          "연산자 ": "(3)",
+          "주소": "-",
+          "순서": "11",
+          "연산자": "AN",
+          "주소": "P003"
+        },
+        {
+          "순서": "5",
+          "연산자 ": "(4)",
+          "주소": "M000",
+          "순서": "12",
+          "연산자": "W",
+          "주소": "P011"
+        },
+        {
+          "순서": "6",
+          "연산자 ": "AN",
+          "주소": "P001",
+          "순서": "13",
+          "연산자": "(8)",
+          "주소": "-"
+        }],
+      "isKillerProblem": false
+    },
+    {
+      "number": 12,
+      "type": "단답",
+      "questionText": "한국전기설비규정에 따른 저압전로 중의 전동기 보호용 과전류보호장치의 시설 중 단락보호전용 퓨즈의 용단특성에 들어갈 숫자를 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "(ㄱ) : 60  (ㄴ) : 0.2\n(ㄷ) : 60  (ㄹ) : 0.1",
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": [
+        {
+          "정격전류의 배수": "4배",
+          "불용단시간": "(ㄱ)초 이내",
+          "용단시간": "-"
+        },
+        {
+          "정격전류의 배수": "6.3배",
+          "불용단시간": "-",
+          "용단시간": "(ㄷ)초 이내"
+        },
+        {
+          "정격전류의 배수": "8배",
+          "불용단시간": "0.5초 이내",
+          "용단시간": "-"
+        },
+        {
+          "정격전류의 배수": "10배",
+          "불용단시간": "(ㄴ)초 이내",
+          "용단시간": "-"
+        },
+        {
+          "정격전류의 배수": "12.5배",
+          "불용단시간": "-",
+          "용단시간": "0.5초 이내"
+        },
+        {
+          "정격전류의 배수": "19배",
+          "불용단시간": "-",
+          "용단시간": "(ㄹ)초 이내"
+        }],
+      "isKillerProblem": false
+    },
+    {
+      "number": 13,
+      "type": "논리회로",
+      "questionText": "다음 논리회로의 명칭을 쓰고 논리식과 논리표를 완성하시오.",
+      "imagePaths": [ "assets/images/2024_1_q13.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "논리회로의 명칭",
+          "imagePaths": null,
+          "answer": "배타적 논리합 회로(Exclusive OR)",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "논리식 : $X =$",
+          "imagePaths": null,
+          "answer": "$X=A\\overline{B}+\\overline{A}B$",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "3)",
+          "questionText": "논리표를 작성하시오.",
+          "imagePaths": null,
+          "answer": "X\n0\n1\n1\n0",
+          "explanation": "",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": [
+            {
+              "A": "0",
+              "B": " 0 ",
+              "X": " "
+            },
+            {
+              "A": "0",
+              "B": " 1 ",
+              "X": " "
+            },
+            {
+              "A": "1",
+              "B": " 0 ",
+              "X": " "
+            },
+            {
+              "A": "1",
+              "B": " 1 ",
+              "X": " "
+            }]
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 14,
+      "type": "조명 설비",
+      "questionText": "어떤 램프의 전압이 220[V], 소비 전력이 1000[W]이고 램프에서 나오는 광속이 2000[Im]일 때, 램프의 효율을 구하시오.（단, 반드시 단위도 쓰시오.）",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$2[lm/W]$",
+      "explanation": "$\\eta=\\dfrac{F}{P}=\\dfrac{2000}{1000}=2[lm/W]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 15,
+      "type": "전동기",
+      "questionText": "양수량 18$[m^3/min]$, 전양정 25$[m]$의 양수 펌프용 전동기의 소요 출력$[kW]$을 구하시오.\n(단, 펌프의 효율은 $82[\\%]$이며, 여유계수는 1.1 이다.）",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "98.64[kW]",
+      "explanation": "$P=\\dfrac{KQH}{6.12\\eta}=\\dfrac{1.1\\cdot18\\cdot25}{6.12\\cdot0.82}=98.64[kW]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 16,
+      "type": "단답",
+      "questionText": "한국전기설비규정에 나오는 변전소에 대한 내용이다. 빈칸에 들어갈 숫자를 쓰시오.",
+      "imagePaths": null,
+      "supplementaryInfo": "상주 감시를 하지 아니하는 변전소의 시설\n1. 변전소（이에 준하는 곳으로서 (  1  )[kV］를 초과하는 특고압의 전기를 변성하기 위한 것을 포함한다. 이하 같다）의 운전에 필요한 지식 및 기능을 가진 자（이하 “기술원”이 라고 한다）가 그 변전소에 상주하여 감시를 하지 아니하는 변전소는 다음에 따라 시설하는 경우에 한한다.\n가. 사용전압이(  2  )[kV]이하의 변압기를 시설하는 변전소로서 기술원이 수시로 순회하거나 그 변전소를 원격감시 제어하는 제어소(이하에서“변전제어소”라 한다)에서 상시 감시하는 경우",
+      "subQuestions": [],
+      "answer": "(1) : 50\n(2) : 170",
+      "explanation": "KEC 351.9 상주 감시를 하지 아니하는 변전소의 시설\n1. 변전소（이에 준하는 곳으로서 50［kV］를 초과하는 특고압의 전기를 변성하기 위한 것을 포함한다. 이하 같다）의 운전에 필요한 지식 및 기능을 가진 자（이하 “기술원”이라고 한다）가 그 변전소 에 상주하여 감시를 하지 아니하는 변전소는 다음에 따라 시설하는 경우에 한한다.\n가. 사용전압이 170[kV］ 이하의 변압기를 시설하는 변전소로서 기술원이 수시로 순회하거나 그 변전소를 원격감시 제어하는 제어소（이하에서“변전제어소”라 한다）에서 상시 감시하는 경우\n나. 사용전압이 170[kV］를 초과하는 변압기를 시설하는 변전소로서 변전제어소에서 상시 감시 하는 경우",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 17,
+      "type": "",
+      "questionText": "그림과 같은 회로에서 중성선이 단선되었을 때, A부하 와 B부하에 걸리는 전압[V]을 각각 구하시오. (단, 부하의 역률은 1이다.）",
+      "imagePaths": [ "assets/images/2024_1_q17.png" ],
+      "supplementaryInfo": null,
+      "subQuestions": [
+        {
+          "subNumber": "1)",
+          "questionText": "A부하",
+          "imagePaths": null,
+          "answer": "$V_A=133.33[V]$",
+          "explanation": "$P=\\dfrac{V^2}{R}\\rightarrow\\,R=\\dfrac{V^2}{P}$\n\n$R_A=\\dfrac{100^2}{50}=200[\\Omega]\\quad\\,R_B=\\dfrac{100^2}{100}=100[\\Omega]$\n\n$V_A=\\dfrac{200}{200+100}\\cdot200=133.33[V]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        },
+        {
+          "subNumber": "2)",
+          "questionText": "B부하",
+          "imagePaths": null,
+          "answer": "$V_B=66.67[V]$",
+          "explanation": "$V_B=\\dfrac{100}{200+100}\\cdot200=66.67[V]$",
+          "answerImagePaths": null,
+          "explanationImagePaths": null,
+          "tableData": null
+        }
+      ],
+      "answer": null,
+      "explanation": "",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    },
+    {
+      "number": 18,
+      "type": "단답",
+      "questionText": "보호도체, 절연, 기타 부위의 재질 및 초기온도와 최종온도에 따라 정해지는 계수는 143, 보호장치를 통해 흐를 수 있는 예상 고장전류 실효값은 10000[A], 자동차단을 위한 보호장치의 동작시간은 0.2초일 때, 주어진 조건을 참고하여 보호도체의 최소 공칭단면적 $[mm^2]$을 구하시오. (단, 한국전기설비규정 보호도체 단면적 계산식에 따르며, 주어진 조건 이외는 고려하지 않는다.)\n\n(공칭단면적$[mm^2]$  6  10  16  25  35  50)",
+      "imagePaths": null,
+      "supplementaryInfo": null,
+      "subQuestions": [],
+      "answer": "$35[mm^2]$",
+      "explanation": "$S=\\dfrac{\\sqrt{I^{2}t}}{k}=\\dfrac{\\sqrt{10000^{2}\\cdot0.2}}{143}=31.27[mm^2]$",
+      "answerImagePaths": null,
+      "explanationImagePaths": null,
+      "tableData": null,
+      "isKillerProblem": false
+    }
+  ]
+}
