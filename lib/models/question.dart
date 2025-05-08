@@ -1,4 +1,3 @@
-// lib/models/question.dart
 
 // 소문제 정보를 담는 클래스
 
@@ -11,7 +10,7 @@ class SubQuestion {
   final String? supplementaryInfo;
   final List<String>? answerImagePaths;
   final List<String>? explanationImagePaths;
-  final String? tableImagePath; // <-- 추가 (String? 타입)
+  //final String? tableImagePath; // <-- 추가 (String? 타입)
 
   SubQuestion({
     required this.subNumber,
@@ -21,7 +20,7 @@ class SubQuestion {
     this.explanation,
     this.answerImagePaths,
     this.explanationImagePaths,
-    this.tableImagePath, // <-- 생성자에 추가
+    //this.tableImagePath, // <-- 생성자에 추가
     this.supplementaryInfo,
   });
 
@@ -50,7 +49,7 @@ class SubQuestion {
       explanation: json['explanation'] as String?, // null 허용
       answerImagePaths: parseImagePaths(json['answerImagePaths']),
       explanationImagePaths: parseImagePaths(json['explanationImagePaths']),
-      tableImagePath: json['tableImagePath'] as String?,
+      //tableImagePath: json['tableImagePath'] as String?,
       supplementaryInfo: json['supplementaryInfo'] as String?,
     );
   }
@@ -70,6 +69,9 @@ class Question {
   final List<String>? explanationImagePaths; // 전체 해설 이미지 경로 리스트
   final String? tableImagePath; // <-- 추가
   final bool isKillerProblem;
+  final int? year;          // 원래 문제의 연도 (Nullable)
+  final int? sessionNumber; // 원래 문제의 회차 (Nullable)
+  final int? originalIndex; // 원래 JSON 파일에서의 인덱스 (Nullable)
 
   Question({
     required this.number,
@@ -84,6 +86,9 @@ class Question {
     this.explanationImagePaths,
     this.tableImagePath, // <-- 생성자에 추가
     required this.isKillerProblem,
+    this.year,
+    this.sessionNumber,
+    this.originalIndex,
   });
 
   factory Question.fromJson(Map<String, dynamic> json) {
@@ -116,6 +121,24 @@ class Question {
       explanationImagePaths: parseImagePaths(json['explanationImagePaths']),
       tableImagePath: json['tableImagePath'] as String?,
       isKillerProblem: json['isKillerProblem'] as bool? ?? false,
+    );
+  }
+  Question copyWithContext({required int year, required int sessionNumber, required int originalIndex}) {
+    return Question(
+      number: this.number,
+      type: this.type,
+      questionText: this.questionText,
+      imagePaths: this.imagePaths,
+      supplementaryInfo: this.supplementaryInfo,
+      subQuestions: this.subQuestions,
+      answer: this.answer,
+      explanation: this.explanation,
+      answerImagePaths: this.answerImagePaths,
+      explanationImagePaths: this.explanationImagePaths,
+      isKillerProblem: this.isKillerProblem,
+      year: year,
+      sessionNumber: sessionNumber,
+      originalIndex: originalIndex,
     );
   }
 }
