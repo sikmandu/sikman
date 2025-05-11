@@ -304,54 +304,51 @@ class _QuestionViewerState extends State<QuestionViewer> {
 
   @override
   Widget build(BuildContext context) {
-    print("QuestionViewer build: Q#${widget.question.number}, TotalPages: $_totalPages, CurrentPageIndex: $_currentPageIndex, PageControllerAttached: ${_pageController.hasClients}");
-
-    // _totalPages가 0이면 PageView.builder가 에러를 발생시킬 수 있으므로, 최소 1로 보정
-    final itemCountForPageView = _totalPages >= 1 ? _totalPages : 1;
+    print("Building QuestionViewer - Total Pages: $_totalPages"); // 디버그 로그
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (itemCountForPageView > 1) // 소문제가 있을 때만 페이지 UI (버튼 등) 표시
+        // 페이지 정보 및 네비게이션 버튼
+        if (_totalPages > 1)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back_ios), iconSize: 20.0, tooltip: '이전 페이지',
-                  onPressed: (_pageController.hasClients && _currentPageIndex > 0)
-                      ? () { _pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut); }
+                  icon: const Icon(Icons.arrow_back_ios), iconSize: 20.0,
+                  tooltip: '이전 페이지',
+                  onPressed: (_currentPageIndex > 0)
+                      ? () => _pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut)
                       : null,
                 ),
                 Text(
-                  '페이지 ${_currentPageIndex + 1} / $itemCountForPageView',
+                  '페이지 ${_currentPageIndex + 1} / $_totalPages',
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios), iconSize: 20.0, tooltip: '다음 페이지',
-                  onPressed: (_pageController.hasClients && _currentPageIndex < itemCountForPageView - 1)
-                      ? () { _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut); }
+                  icon: const Icon(Icons.arrow_forward_ios), iconSize: 20.0,
+                  tooltip: '다음 페이지',
+                  onPressed: (_currentPageIndex < _totalPages - 1)
+                      ? () => _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut)
                       : null,
                 ),
               ],
             ),
           ),
+        // PageView
         Expanded(
           child: PageView.builder(
             controller: _pageController,
-            itemCount: itemCountForPageView,
+            itemCount: _totalPages,
             onPageChanged: (index) {
-              if (mounted) { // 위젯이 여전히 트리에 마운트된 상태인지 확인
-                setState(() {
-                  _currentPageIndex = index;
-                });
-              }
+              // 내부 페이지 인덱스 상태 업데이트
+              setState(() {
+                _currentPageIndex = index;
+              });
             },
             itemBuilder: (context, pageIndex) {
-              // pageIndex가 유효한 범위 내에 있는지 한번 더 확인
-              if (pageIndex >= itemCountForPageView && itemCountForPageView > 0) {
-                return _buildPageContent(context, widget.question, 0); // 안전하게 첫 페이지 내용
-              }
+              // 페이지 내용 빌드
               return _buildPageContent(context, widget.question, pageIndex);
             },
           ),
