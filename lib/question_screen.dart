@@ -1,26 +1,34 @@
+// lib/question_screen.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-// --- 올바른 Import 경로 확인 ---
+import 'package:provider/provider.dart'; // Provider import
+
+import 'constants.dart'; // 사용한다면 유지
 import 'models/question.dart';
 import 'models/incorrect_question_info.dart';
+import 'models/study_context.dart';
+import 'notifiers/recent_study_notifier.dart'; // Notifier import
 import 'services/incorrect_note_service.dart';
-//import 'package:flutter_math_fork/flutter_math.dart';
 import 'widgets/question_viewer.dart';
+import 'widgets/common_app_bar.dart'; // 사용한다면 유지
 // ---------------------------
 
 class QuestionScreen extends StatefulWidget {
   final int year;
   final int sessionNumber;
-  final int initialIndex;
-  final String? categoryFilter; // ★★★ 카테고리 필터 파라미터 추가 ★★★
+  // final int initialIndex; // 이 대신 아래 initialQuestionNumber 사용 또는 둘 다 사용
+  final String? categoryFilter;
+  final int? initialQuestionNumber; // ★★★ 실제 문제 번호 (1부터 시작)를 받을 수 있도록 추가 ★★★
+  final int initialIndex; // 기존 initialIndex는 fallback 또는 기본값으로 유지 가능
 
   const QuestionScreen({
     super.key,
     required this.year,
     required this.sessionNumber,
-    this.initialIndex = 0,
-    this.categoryFilter, // ★★★ 생성자에 추가 ★★★
+    this.initialIndex = 0, // 기본값은 0번 인덱스
+    this.categoryFilter,
+    this.initialQuestionNumber, // 생성자에 추가
   });
 
   @override
@@ -28,24 +36,104 @@ class QuestionScreen extends StatefulWidget {
 }
 
 class _QuestionScreenState extends State<QuestionScreen> {
-  // --- 상태 변수 (UI 로직 관련 변수 제거) ---
   List<Question> _loadedQuestions = [];
   bool _isLoading = true;
   String _loadingError = '';
   int _totalQuestionsInSession = 0;
-  int _currentIndex = 0; // 현재 문제 인덱스 (부모가 관리)
+  int _currentIndex = 0;
   String? _assessmentStatus;
   final IncorrectNoteService _noteService = IncorrectNoteService();
- // PageController _pageController = PageController(); // 페이지 뷰 컨트롤러
- // int _currentPageIndex = 0; // 현재 *페이지* 인덱스
-  //int _totalPages = 1; // 현재 문제의 총 페이지 수
+
+  // ★★★ RecentStudyNotifier 인스턴스를 저장할 멤버 변수 ★★★
+  RecentStudyNotifier? _recentStudyNotifierInstance;
+  bool _isNotifierInitialized = false;
+
 
   // --- 초기화 ---
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex;
+    // initState에서는 Provider.of를 사용한 초기화가 불안정할 수 있으므로
+    // _loadQuestionData 호출 후, 또는 didChangeDependencies에서 Notifier를 가져옵니다.
     _loadQuestionData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // 위젯의 의존성이 변경될 때 호출되며, context를 안전하게 사용할 수 있는 시점입니다.
+    if (!_isNotifierInitialized) {
+      _recentStudyNotifierInstance = Provider.of<RecentStudyNotifier>(context, listen: false);
+      _isNotifierInitialized = true;
+      print("QuestionScreen: RecentStudyNotifier 인스턴스 초기화됨 in didChangeDependencies");
+
+      // Notifier가 준비된 후, 데이터 로드가 이미 완료되었고 유효한 문제가 있다면 첫 문제에 대한 최근 학습 업데이트
+      if (!_isLoading && _loadedQuestions.isNotEmpty && _currentIndex >=0 && _currentIndex < _loadedQuestions.length) {
+        _updateRecentStudyForCurrentQuestion(isFromDidChangeDependencies: true);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    print("QuestionScreen: dispose 호출됨");
+    if (_isNotifierInitialized) { // Notifier가 성공적으로 초기화되었을 경우에만 호출
+      _updateRecentStudyForCurrentQuestion(isDisposing: true);
+    }
+    super.dispose();
+  }
+
+  Future<void> _updateRecentStudyForCurrentQuestion({bool isDisposing = false, bool isFromDidChangeDependencies = false}) async {
+    // isDisposing이 true가 아닐 때만 mounted를 체크합니다. dispose 중에는 mounted가 false일 수 있습니다.
+    if (!isDisposing && !mounted) {
+      print("QuestionScreen: _updateRecentStudyForCurrentQuestion - mounted false (and not disposing), 업데이트 건너뜀");
+      return;
+    }
+
+    if (_isLoading || _loadingError.isNotEmpty || _loadedQuestions.isEmpty || _currentIndex < 0 || _currentIndex >= _loadedQuestions.length) {
+      print("QuestionScreen: 최근 학습 업데이트 건너뜀 (상태 유효하지 않음 - isLoading:$_isLoading, error:$_loadingError, count:${_loadedQuestions.length}, index:$_currentIndex)");
+      return;
+    }
+
+    final Question currentQuestion = _loadedQuestions[_currentIndex];
+    final notifier = _recentStudyNotifierInstance; // initState 또는 didChangeDependencies에서 할당된 인스턴스 사용
+
+    if (notifier == null) {
+      // 이 경우는 didChangeDependencies가 아직 호출되지 않았거나 실패한 경우
+      // dispose 중이 아니라면 Provider.of를 시도해볼 수 있으나, _isNotifierInitialized 플래그로 관리하는 것이 더 안전
+      if (!isDisposing && mounted) { // dispose 중이 아닐때만 context를 사용한 Provider.of 시도
+        print("QuestionScreen: _recentStudyNotifierInstance is null, attempting Provider.of again.");
+        final tempNotifier = Provider.of<RecentStudyNotifier>(context, listen: false);
+        await _performUpdateLogic(tempNotifier, currentQuestion);
+      } else {
+        print("QuestionScreen: _recentStudyNotifierInstance is null and (isDisposing or not mounted). Cannot update.");
+      }
+      return;
+    }
+
+    if (isDisposing) print("QuestionScreen: dispose 중 최근 학습 저장 시도 - ${currentQuestion.number}번");
+    else print("QuestionScreen: _updateRecentStudyForCurrentQuestion 호출됨 - Q#${currentQuestion.number}");
+
+    await _performUpdateLogic(notifier, currentQuestion);
+  }
+  Future<void> _performUpdateLogic(RecentStudyNotifier notifier, Question currentQuestion) async {
+    int originalIndexToSave = currentQuestion.originalIndex ?? _currentIndex; // fallback
+    if (widget.categoryFilter == null || widget.categoryFilter!.isEmpty) {
+      await notifier.updateRecentPastExam(
+          widget.year,
+          widget.sessionNumber,
+          currentQuestion.number,
+          originalIndexToSave
+      );
+    } else {
+      await notifier.updateRecentCategoryExam(
+          widget.categoryFilter!,
+          currentQuestion.year ?? widget.year,
+          currentQuestion.sessionNumber ?? widget.sessionNumber,
+          currentQuestion.number,
+          originalIndexToSave
+      );
+    }
   }
 
   // --- 데이터 로딩 ---
@@ -59,137 +147,135 @@ class _QuestionScreenState extends State<QuestionScreen> {
       final Map<String, dynamic> jsonData = jsonDecode(jsonString) as Map<String, dynamic>;
       final List<dynamic> questionListJson = jsonData['questions'] as List<dynamic>? ?? [];
 
-      // --- ★★★ 'final' 키워드 제거 ★★★ ---
       List<Question> questions = questionListJson.map((qJson) {
         if (qJson is Map<String, dynamic>) {
           final q = Question.fromJson(qJson);
-          // 컨텍스트 추가 로직 (필요시)
-          // return q.copyWithContext(year: widget.year, sessionNumber: widget.sessionNumber, originalIndex: questionListJson.indexOf(qJson));
-          return q;
+          return q.copyWithContext(
+              year: widget.year,
+              sessionNumber: widget.sessionNumber,
+              originalIndex: questionListJson.indexOf(qJson)
+          );
         }
         return null;
       }).whereType<Question>().toList();
-      // ---------------------------------
 
-      // --- 카테고리 필터링 로직 (이제 questions 변수에 재할당 가능) ---
       if (widget.categoryFilter != null && widget.categoryFilter!.isNotEmpty) {
-        print("Applying category filter: ${widget.categoryFilter}");
-        questions = questions.where((q) => q.type == widget.categoryFilter).toList(); // 이제 오류 없음
-        print("Filtered question count: ${questions.length}");
+        questions = questions.where((q) => q.type == widget.categoryFilter).toList();
       }
-      // --------------------------------------------------------
 
-      // --- 나머지 로직 (인덱스 검사, 상태 업데이트 등) ---
-      int validInitialIndex = _currentIndex;
-      if (questions.isEmpty) { // 필터링 후 비었는지 확인
-        _loadingError = widget.categoryFilter != null
-            ? "'${widget.categoryFilter}' 유형의 문제가 이 회차에 없습니다."
-            : '표시할 문제가 없습니다.';
-      } else if (validInitialIndex >= questions.length || validInitialIndex < 0) {
-        validInitialIndex = 0;
+      int determinedInitialIndex = widget.initialIndex;
+      if (widget.initialQuestionNumber != null && questions.isNotEmpty) {
+        int foundIndex = questions.indexWhere((q) => q.number == widget.initialQuestionNumber);
+        if (foundIndex != -1) {
+          determinedInitialIndex = foundIndex;
+        } else {
+          determinedInitialIndex = questions.isNotEmpty ? 0 : -1;
+        }
+      } else if (questions.isNotEmpty && widget.initialIndex >= questions.length) {
+        determinedInitialIndex = 0;
+      } else if (questions.isEmpty) {
+        determinedInitialIndex = -1;
       }
 
       if (mounted) {
         setState(() {
-          _loadedQuestions = questions; // 최종 리스트를 상태 변수에 저장
+          _loadedQuestions = questions;
           _totalQuestionsInSession = questions.length;
-          _currentIndex = validInitialIndex;
+          _currentIndex = determinedInitialIndex;
           _isLoading = false;
           _assessmentStatus = null;
+          if (questions.isEmpty && _loadingError.isEmpty) {
+            _loadingError = widget.categoryFilter != null
+                ? "'${widget.categoryFilter}' 유형의 문제가 이 회차에 없습니다."
+                : '표시할 문제가 없습니다.';
+          }
         });
+        // 데이터 로드 완료 후, 첫 문제에 대한 "최근 학습" 정보 업데이트
+        // Notifier 인스턴스가 didChangeDependencies에서 설정된 후 안전하게 호출
+        if (_isNotifierInitialized && _currentIndex != -1) {
+          await _updateRecentStudyForCurrentQuestion();
+        }
       }
-      // -------------------------------------------------
     } catch (e, stacktrace) {
-      print("!!! QuestionScreen _loadQuestionData 에러 발생: $e");
-      print(stacktrace);
+      print("!!! QuestionScreen _loadQuestionData 에러 발생: $e\n$stacktrace");
       if (mounted) { setState(() { _loadingError = '문제 로딩 오류: $e'; _isLoading = false; _loadedQuestions = []; _totalQuestionsInSession = 0; }); }
     }
   }
 
   // --- 문제 이동 함수 ---
-  void _goToQuestion(int newIndex) {
+  void _goToQuestion(int newIndex) async {
     if (!mounted || newIndex < 0 || newIndex >= _totalQuestionsInSession) return;
     print("QuestionScreen: Navigating to index $newIndex");
-    setState(() {
-      _currentIndex = newIndex;
-      _assessmentStatus = null; // 문제 이동 시 평가 상태 초기화
-      // _isAnswerVisibleMap = {}; // QuestionViewer가 자체 관리
-    });
-    // 데이터 재로딩 불필요
+
+    if (mounted) {
+      setState(() {
+        _currentIndex = newIndex;
+        _assessmentStatus = null;
+      });
+    }
+    // 다음 문제로 이동 후, "최근 학습" 정보 업데이트
+    await _updateRecentStudyForCurrentQuestion();
   }
 
   // --- 화면 빌드 ---
   @override
   Widget build(BuildContext context) {
-    print(">>> Build 시작됨. Index: $_currentIndex, isLoading: $_isLoading, Error: $_loadingError");
-    // 로딩/에러 처리
+    // Notifier가 초기화되었는지 또는 로딩 중인지 먼저 확인
+    if (!_isNotifierInitialized && !_isLoading) {
+      // 이 경우는 didChangeDependencies가 아직 호출되지 않았거나, Provider 설정에 문제가 있을 수 있음.
+      // 안전하게 로딩 화면을 보여주거나, WidgetsBinding으로 다음 프레임에 재시도할 수 있음.
+      // 지금은 로딩을 표시.
+      print("QuestionScreen build: Notifier 아직 초기화 안됨, 로딩 표시");
+      return Scaffold(appBar: AppBar(title: Text("초기화 중...")), body: Center(child: CircularProgressIndicator()));
+    }
+
     if (_isLoading) {
-      return Scaffold(appBar: AppBar(title: Text('${widget.year}년 ${widget.sessionNumber}회차')), body: const Center(child: CircularProgressIndicator()));
+      return Scaffold(appBar: buildCommonAppBar(context: context,title: '${widget.year}년 ${widget.sessionNumber}회차'), body: const Center(child: CircularProgressIndicator()));
     }
     if (_loadingError.isNotEmpty) {
-      return Scaffold(appBar: AppBar(title: Text('${widget.year}년 ${widget.sessionNumber}회차')), body: Center(child: Padding(padding: const EdgeInsets.all(16.0), child: Text(_loadingError, textAlign: TextAlign.center, style: const TextStyle(color: Colors.red)))));
+      return Scaffold(appBar: buildCommonAppBar(context: context,title: '${widget.year}년 ${widget.sessionNumber}회차'), body: Center(child: Padding(padding: const EdgeInsets.all(16.0), child: Text(_loadingError, textAlign: TextAlign.center, style: const TextStyle(color: Colors.red)))));
+    }
+    if (_currentIndex == -1 || _loadedQuestions.isEmpty || _currentIndex >= _loadedQuestions.length) {
+      return Scaffold(
+          appBar: buildCommonAppBar(context: context,title: '${widget.year}년 ${widget.sessionNumber}회차'),
+          body: Center(child: Text(_loadingError.isNotEmpty ? _loadingError : '표시할 문제가 없습니다.'))
+      );
     }
 
-    // --- ★★★ Null 체크 강화 및 Non-nullable 변수 할당 ★★★ ---
-    // 1. 인덱스가 유효한지 먼저 확인
-    if (_currentIndex < 0 || _currentIndex >= _loadedQuestions.length) {
-      // 유효하지 않은 인덱스 처리 (예: 첫 문제로 이동 또는 에러 메시지)
-      print("Error: Invalid index $_currentIndex in build method.");
-      // 안전하게 첫 문제 표시 또는 에러 화면 표시
-      if (_loadedQuestions.isEmpty) {
-        return Scaffold(appBar: AppBar(title: Text('${widget.year}년 ${widget.sessionNumber}회차')), body: const Center(child: Text('표시할 문제가 없습니다.')));
-      } else {
-        // 상태를 0으로 설정하고 다시 빌드 유도 (무한 루프 가능성 주의)
-        // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   if(mounted) setState(() => _currentIndex = 0);
-        // });
-        // 또는 그냥 에러 메시지 표시
-        return Scaffold(appBar: AppBar(title: Text('${widget.year}년 ${widget.sessionNumber}회차')), body: const Center(child: Text('문제 인덱스 오류')));
-      }
-    }
-
-    // 2. 유효한 인덱스로 non-nullable Question 객체 가져오기
-    // (위에서 인덱스 유효성을 확인했으므로 _loadedQuestions[_currentIndex] 접근 안전)
     final Question currentQuestion = _loadedQuestions[_currentIndex];
-    // --------------------------------------------------------
-
-    final int currentQuestionNumber = _currentIndex + 1;
-
+    final int currentQuestionDisplayNumber = _currentIndex + 1;
     // 메인 Scaffold
     return Scaffold(
-      appBar: AppBar(
-        // 제목에 필터 정보 포함 가능
-        title: Text(
-            '${widget.year}년 ${widget.sessionNumber}회차 ${widget.categoryFilter != null ? "(${widget.categoryFilter})" : ""} 문제 ($currentQuestionNumber / $_totalQuestionsInSession)'
-        ),
+      appBar: buildCommonAppBar(
+          context: context,
+          title: '${widget.year}년 ${widget.sessionNumber}회차 ${widget.categoryFilter != null ? "(${widget.categoryFilter})" : ""} 문제 ($currentQuestionDisplayNumber / $_totalQuestionsInSession)'
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (widget.categoryFilter != null)
-          // --- 문제 출처 정보 표시 Text 추가 ---
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              // 위젯의 year/sessionNumber와 currentQuestion의 number 사용
-              '${widget.year}년 ${widget.sessionNumber}회차 ${currentQuestion.number}번',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey.shade700,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                '${currentQuestion.year ?? widget.year}년 ${currentQuestion.sessionNumber ?? widget.sessionNumber}회차 ${currentQuestion.number}번',
+                style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
-          ),
           Expanded(
             child: QuestionViewer(
-              key: ValueKey('${widget.year}_${widget.sessionNumber}_${widget.categoryFilter}_$_currentIndex'),
+              key: ValueKey(currentQuestion.hashCode), // 문제 객체가 바뀔 때마다 키가 바뀌도록
               question: currentQuestion,
+              contextType: (widget.categoryFilter == null || widget.categoryFilter!.isEmpty)
+                  ? StudyContextType.pastExam
+                  : StudyContextType.categoryExam,
+              displayYear: widget.year,
+              displaySessionNumber: widget.sessionNumber,
+              categoryName: widget.categoryFilter,
             ),
           ),
-          // --------------------
         ],
       ),
-
       persistentFooterButtons: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),

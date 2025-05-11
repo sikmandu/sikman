@@ -1,11 +1,16 @@
+// lib/incorrect_note_review_screen.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import '../models/incorrect_question_info.dart'; // 경로 확인!
-import 'package:sikman/models/question.dart';       // 경로 확인!
+import 'package:provider/provider.dart'; // Provider 패키지 import
+
+// 프로젝트 내부 파일 import
+import '../models/incorrect_question_info.dart';
+import '../models/question.dart';
+import '../models/study_context.dart'; // StudyContextType enum
+import '../notifiers/recent_study_notifier.dart'; // Notifier import
 import '../services/incorrect_note_service.dart';
-import 'widgets/question_viewer.dart';// 서비스 import 확인!
-import 'package:flutter_math_fork/flutter_math.dart';
+import '../widgets/question_viewer.dart';
 
 // 오답 노트 복습 화면 위젯
 class IncorrectNoteReviewScreen extends StatefulWidget {
@@ -36,6 +41,8 @@ class _IncorrectNoteReviewScreenState extends State<IncorrectNoteReviewScreen> {
   // Map<int, bool> _isAnswerVisibleMap; // 제거 (QuestionViewer가 관리)
   // --------------------------------------
   // --- 초기화 ---
+
+
   @override
   void initState() {
     super.initState();
@@ -56,10 +63,61 @@ class _IncorrectNoteReviewScreenState extends State<IncorrectNoteReviewScreen> {
     }
   }
 
+
+  // --- ★★★ 화면 종료 시 학습 위치 저장 ★★★ ---
+  @override
+  void dispose() {
+    if (mounted) {
+      _updateRecentStudyForCurrentReviewedQuestion(isDisposing: true);
+    }
+    super.dispose();
+  }
+
+  // ★ 최근 학습 정보를 Notifier를 통해 업데이트하는 함수
+  Future<void> _updateRecentStudyForCurrentReviewedQuestion({bool isDisposing = false}) async {
+    if (!mounted || _isLoading || _loadingError.isNotEmpty || _currentFullQuestion == null) {
+      if (isDisposing) print("IncorrectNoteReviewScreen: dispose 중 최근 학습 업데이트 건너뜀 (상태 유효하지 않음)");
+      else print("IncorrectNoteReviewScreen: 최근 학습 업데이트 건너뜀 (상태 유효하지 않음)");
+      return;
+    }
+    if (_currentIndex < 0 || _currentIndex >= _currentNotesInReview.length) return;
+
+    final Question questionToUpdate = _currentFullQuestion!;
+    final IncorrectQuestionInfo noteInfo = _currentNotesInReview[_currentIndex];
+    final recentStudyNotifier = Provider.of<RecentStudyNotifier>(context, listen: false);
+
+    int originalIndexToSave = questionToUpdate.originalIndex ?? noteInfo.questionIndex; // IncorrectQuestionInfo의 questionIndex는 원본 인덱스여야 함
+    print("IncorrectNoteReviewScreen: _updateRecentStudyForCurrentReviewedQuestion 호출됨 - Q#${questionToUpdate.number}, originalIndex: $originalIndexToSave, Category: ${noteInfo.questionType}");
+
+    if (questionToUpdate.year != null && questionToUpdate.sessionNumber != null) {
+      // ★★★ originalIndex 전달 ★★★
+      await recentStudyNotifier.updateRecentIncorrectNoteView(
+          questionToUpdate.year!,
+          questionToUpdate.sessionNumber!,
+          questionToUpdate.number,
+          noteInfo.questionType, // 카테고리로 사용될 원본 문제 유형
+          originalIndexToSave
+      );
+      // 2. 원본 과년도의 최근 학습 업데이트
+      await recentStudyNotifier.updateRecentPastExam(
+          questionToUpdate.year!,
+          questionToUpdate.sessionNumber!,
+          questionToUpdate.number,
+          originalIndexToSave
+      );
+      // 3. (선택적) 오답노트 자체의 최근 학습 아이템 업데이트 (Notifier에 해당 로직이 있다면)
+      // await recentStudyNotifier.updateActualRecentIncorrectNoteItem(...);
+    } else {
+      print("IncorrectNoteReviewScreen 경고: 최근 학습 저장 시 Question 객체에 year 또는 sessionNumber 정보가 없습니다.");
+    }
+  }
+
+
+
   // --- 데이터 로딩 함수 ---
   Future<void> _loadFullQuestionData(IncorrectQuestionInfo noteInfo) async {
     if (!mounted) return;
-    setState(() { _isLoading = true; _loadingError = ''; _currentFullQuestion = null; }); // 로딩 시작 시 현재 문제 null 처리
+    setState(() { _isLoading = true; _loadingError = ''; _currentFullQuestion = null; });
 
     try {
       final String filePath = 'assets/data/${noteInfo.year}_${noteInfo.sessionNumber}.json';
@@ -67,39 +125,77 @@ class _IncorrectNoteReviewScreenState extends State<IncorrectNoteReviewScreen> {
       final Map<String, dynamic> jsonData = jsonDecode(jsonString) as Map<String, dynamic>;
       final List<dynamic> questionListJson = jsonData['questions'] as List<dynamic>? ?? [];
 
-      if (noteInfo.questionIndex >= 0 && noteInfo.questionIndex < questionListJson.length) {
-        final qJson = questionListJson[noteInfo.questionIndex] as Map<String, dynamic>;
-        final questionData = Question.fromJson(qJson);
+      // noteInfo.questionIndex가 원본 JSON 파일 내에서의 0부터 시작하는 인덱스여야 함.
+      int targetOriginalJsonIndex = noteInfo.questionIndex;
+      Question? loadedQuestionData;
 
-        // ★★★ 로드된 Question 객체에 컨텍스트 정보 추가 (오답노트 저장을 위해 필요할 수 있음) ★★★
-        // (Question 모델에 year, sessionNumber, originalIndex 필드가 있다고 가정)
-        final contextualQuestion = questionData.copyWithContext(
-            year: noteInfo.year,
-            sessionNumber: noteInfo.sessionNumber,
-            originalIndex: noteInfo.questionIndex
+      if (targetOriginalJsonIndex >= 0 && targetOriginalJsonIndex < questionListJson.length) {
+        final qJson = questionListJson[targetOriginalJsonIndex] as Map<String, dynamic>;
+        // 추가 검증: 로드한 문제의 번호와 타입이 noteInfo와 일치하는지
+        if (Question.fromJson(qJson).number == noteInfo.questionNumber &&
+            Question.fromJson(qJson).type == noteInfo.questionType) {
+          loadedQuestionData = Question.fromJson(qJson);
+        }
+      }
+      // 만약 위에서 못찾았거나, 문제번호로 다시 한번 찾아보는 로직
+      if (loadedQuestionData == null) {
+        var foundEntry = questionListJson
+            .asMap().entries // 인덱스와 함께 순회
+            .firstWhere(
+              (entry) {
+            final q = Question.fromJson(entry.value as Map<String, dynamic>);
+            return q.number == noteInfo.questionNumber && q.type == noteInfo.questionType;
+          },
+          orElse: () => const MapEntry(-1, null), // const로 빈 MapEntry 반환
+        );
+        if (foundEntry.key != -1 && foundEntry.value != null) {
+          loadedQuestionData = Question.fromJson(foundEntry.value as Map<String, dynamic>);
+          targetOriginalJsonIndex = foundEntry.key; // 찾은 실제 인덱스로 업데이트
+          print("IncorrectNoteReviewScreen: 문제 번호로 검색하여 원본 인덱스 ${targetOriginalJsonIndex} 찾음.");
+        }
+      }
+
+
+      if (loadedQuestionData != null) {
+        // ★★★ Question 객체에 원본 출처 정보(year, session, originalIndex)를 확실히 주입 ★★★
+        final contextualQuestion = loadedQuestionData.copyWithContext(
+            year: noteInfo.year,                 // 오답 정보에 있는 원본 연도
+            sessionNumber: noteInfo.sessionNumber, // 오답 정보에 있는 원본 회차
+            originalIndex: targetOriginalJsonIndex  // 사용된/찾은 원본 JSON 인덱스
         );
         // ------------------------------------------------------------------
 
         if (mounted) {
           setState(() {
-            _currentFullQuestion = contextualQuestion; // 로드된 Question 객체 저장
+            _currentFullQuestion = contextualQuestion;
             _isLoading = false;
           });
+          // ★ QuestionViewer가 initState 또는 didUpdateWidget에서 _saveRecentStudy를 호출하여 최근 학습 저장
         }
-      } else { throw Exception('Invalid question index (${noteInfo.questionIndex}) in JSON for ${noteInfo.year}-${noteInfo.sessionNumber}.'); }
+      } else {
+        throw Exception('오답노트 정보에 해당하는 문제(번호: ${noteInfo.questionNumber}, 유형: ${noteInfo.questionType})를 JSON 파일(${filePath})에서 찾을 수 없습니다.');
+      }
     } catch (e, stacktrace) {
-      print('Error loading full question data for review: $e\n$stacktrace');
-      if (mounted) { setState(() { _loadingError = '문제 데이터 로딩 오류: $e'; _isLoading = false; }); }
+      print('오답노트 복습 문제 로딩 오류: $e\n$stacktrace');
+      if (mounted) { setState(() { _loadingError = '문제 데이터 로딩 오류:\n$e'; _isLoading = false; }); }
     }
-  }// _loadFullQuestionData 끝
+  }
+
+  static final Question null_question_object = Question(number: -1, type: '', questionText: '', subQuestions: [], isKillerProblem: false);
+
 
   void _navigateToQuestion(int newIndex) {
     if (!mounted || newIndex < 0 || newIndex >= _totalNotesInReview) return;
-    setState(() {
-      _currentIndex = newIndex;
-      _isLoading = true; // 새 문제 로딩 시작 표시
-    });
-    _loadFullQuestionData(_currentNotesInReview[newIndex]); // 새 인덱스의 노트 정보로 문제 로드
+
+    if (mounted) {
+      setState(() {
+        _currentIndex = newIndex;
+        _isLoading = true; // 새 문제 로딩 시작
+        _loadingError = '';
+        _currentFullQuestion = null;
+      });
+    }
+    _loadFullQuestionData(_currentNotesInReview[newIndex]);
   }
 
   // --- ★★★ 삭제 로직 수정 ★★★ ---
@@ -137,30 +233,21 @@ class _IncorrectNoteReviewScreenState extends State<IncorrectNoteReviewScreen> {
       // ------------------------
 
       if (newTotal == 0) {
-        // 목록이 비었으면 이전 화면으로 돌아감
-        print("All notes deleted, popping back.");
-        Navigator.pop(context);
+        Navigator.pop(context, true); // ★ 변경 사항이 있음을 알림
       } else {
-        // 다음 표시할 인덱스 결정 (삭제된 위치 또는 그 이전)
         int nextIndexToShow = (indexToDelete >= newTotal) ? newTotal - 1 : indexToDelete;
-
-        // --- ★★★ setState 호출하여 인덱스 및 목록 상태 업데이트 후, 새 데이터 로드 ★★★ ---
-        setState(() {
-          _currentNotesInReview = updatedNotes; // 업데이트된 리스트 반영
-          _totalNotesInReview = newTotal;      // 업데이트된 총 개수 반영
-          _currentIndex = nextIndexToShow;     // 다음 인덱스로 설정
-          _isLoading = true;                   // 새 문제 로딩 시작 표시
-        });
-        // 업데이트된 인덱스의 노트 정보로 다음 문제 로드
-        _loadFullQuestionData(_currentNotesInReview[nextIndexToShow]);
-        // ------------------------------------------------------------
+        // setState(() { // _navigateToQuestion이 setState를 포함하므로 중복 호출 방지
+        //   _currentNotesInReview = updatedNotes;
+        //   _totalNotesInReview = newTotal;
+        //   // _currentIndex = nextIndexToShow; // _navigateToQuestion에서 설정
+        // });
+        _navigateToQuestion(nextIndexToShow); // 다음 문제로 이동 (이동 후 최근 학습 자동 업데이트)
       }
     } else if (mounted && !deletionSuccessful) {
-      // 삭제 실패 처리
       print("Delete error: Note not found in storage for index $indexToDelete.");
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('삭제 오류: 해당 오답 정보를 찾을 수 없거나 이미 삭제되었습니다.'), duration: Duration(seconds: 2)),);
-      Navigator.pop(context); // 실패 시에도 이전 화면으로
+      // Navigator.pop(context); // 실패 시 바로 닫지 않고 현재 화면 유지 고려
     }
   }
 
@@ -185,27 +272,46 @@ class _IncorrectNoteReviewScreenState extends State<IncorrectNoteReviewScreen> {
 
     // 현재 표시할 노트 정보와 Question 객체
     final IncorrectQuestionInfo currentNoteInfo = _currentNotesInReview[_currentIndex];
-    final Question question = _currentFullQuestion!;
-    final int currentReviewNumber = _currentIndex + 1; // 인덱스는 0부터 시작
+// ★★★ final Question questionToView = _currentFullQuestion!; 이 라인이 확실히 있는지 확인 ★★★
+    final Question questionToView = _currentFullQuestion!;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${currentNoteInfo.year}년 ${currentNoteInfo.sessionNumber}회차 - ${question.number}번 복습'),
+    return WillPopScope( // 뒤로가기 버튼 처리
+        onWillPop: () async {
+      Navigator.pop(context, true); // 변경사항이 있었을 수 있음을 알림
+      return true;
+    },
+    child: Scaffold(
+    appBar: AppBar(
+        title: Text('${currentNoteInfo.year}년 ${currentNoteInfo.sessionNumber}회차 - ${questionToView.number}번 복습'),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete_forever_outlined, color: Colors.white),
             tooltip: '오답 노트에서 삭제',
             onPressed: () async {
-              // --- ★★★ 삭제 확인 Dialog (AppBar에서 호출) ★★★ ---
-              bool? confirmed = await showDialog<bool>(context: context, builder: (BuildContext ctx) {
-                return AlertDialog(title: const Text('삭제 확인'), content: Text('${currentNoteInfo.year}년 ${currentNoteInfo.sessionNumber}회차 - ${question.number}번 문제를 오답 노트에서 삭제하시겠습니까?'),
-                  actions: <Widget>[
-                    TextButton(child: const Text('취소'), onPressed: () => Navigator.of(ctx).pop(false)),
-                    TextButton(child: const Text('삭제', style: TextStyle(color: Colors.red)), onPressed: () { Navigator.of(ctx).pop(true); }),
-                  ],);
-              });
+              bool? confirmed = await showDialog<bool>(
+                  context: context, // ★★★ 여기 context도 확인 ★★★
+                  // builder 파라미터는 함수를 받습니다.
+                  builder: (BuildContext dialogContext) { // ★★★ builder의 context 이름 변경 (선택적이지만 명확성 위해) ★★★
+                    return AlertDialog(
+                      title: const Text('삭제 확인'),
+                      content: Text('${currentNoteInfo.year}년 ${currentNoteInfo.sessionNumber}회차 - ${questionToView.number}번 문제를 오답 노트에서 삭제하시겠습니까?'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('취소'),
+                          onPressed: () => Navigator.of(dialogContext).pop(false), // dialogContext 사용
+                        ),
+                        TextButton(
+                          child: const Text('삭제', style: TextStyle(color: Colors.red)),
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop(true); // dialogContext 사용
+                          },
+                        ),
+                      ],
+                    );
+                  }
+              );
               if (confirmed == true) {
-                _deleteCurrentNote(); // 확인 시 삭제 함수 호출
+                _deleteCurrentNote();
               }
             },
           )
@@ -216,28 +322,29 @@ class _IncorrectNoteReviewScreenState extends State<IncorrectNoteReviewScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
       // --- 문제 출처 정보 표시 Text ---
-      Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0), // 위아래 여백
-      child: Text(
-        // currentNoteInfo에서 year/session, question에서 number 가져오기
-        '${currentNoteInfo.year}년 ${currentNoteInfo.sessionNumber}회차 ${question.number}번',
-        style: TextStyle(
-          fontSize: 13,
-          color: Colors.grey.shade700,
-        ),
-        textAlign: TextAlign.center,
-      ),
+          Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: Text(
+    // questionToView는 copyWithContext를 통해 원본 year, sessionNumber를 가짐
+    '출처: ${questionToView.year ?? '?'}년 ${questionToView.sessionNumber ?? '?'}회차 ${questionToView.number}번 (유형: ${currentNoteInfo.questionType})',
+    style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+    textAlign: TextAlign.center,
     ),
-            Expanded(
-              child: QuestionViewer(
-                // ValueKey는 currentIndex와 노트 자체의 고유성을 조합하는 것이 더 안전할 수 있음
-                key: ValueKey('${currentNoteInfo.year}_${currentNoteInfo.sessionNumber}_${currentNoteInfo.questionIndex}'),
-                question: question,
-              ),
-            ),
-            // --------------------
-          ],
-      ),
+    ),
+    Expanded(
+    child: QuestionViewer(
+    // ValueKey에 문제 객체의 hashCode를 포함하여 객체가 변경될 때 위젯이 갱신되도록 함
+    key: ValueKey('incorrect_${currentNoteInfo.year}_${currentNoteInfo.sessionNumber}_${currentNoteInfo.questionIndex}_${questionToView.hashCode}'),
+    question: questionToView,
+    // ★★★ QuestionViewer에 정확한 컨텍스트 정보 전달 ★★★
+    contextType: StudyContextType.incorrectNoteReview,
+    displayYear: questionToView.year, // Question 객체에 저장된 원본 연도
+    displaySessionNumber: questionToView.sessionNumber, // Question 객체에 저장된 원본 회차
+    categoryName: currentNoteInfo.questionType, // 오답 정보에 있는 원본 유형(카테고리)
+    ),
+    ),
+    ],
+    ),
       // -----------------------------------------
       persistentFooterButtons: [
         Padding(
@@ -259,6 +366,7 @@ class _IncorrectNoteReviewScreenState extends State<IncorrectNoteReviewScreen> {
           ),
         )
       ],
+    ),
     );
   }
 } // _IncorrectNoteReviewScreenState 끝

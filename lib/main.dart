@@ -1,5 +1,7 @@
 // Flutter 및 기본 화면 위젯 가져오기
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // provider 패키지 import
+import 'notifiers/recent_study_notifier.dart'; // 방금 만든 Notifier import
 // 각 화면 파일들 가져오기
 import 'past_exam_screen.dart';
 import 'category_screen.dart';
@@ -9,7 +11,15 @@ import 'mock_exam_screen.dart';
 
 // 앱 시작점
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider( // 여러 Provider를 사용한다면 MultiProvider
+      providers: [
+        ChangeNotifierProvider(create: (_) => RecentStudyNotifier()),
+        // 다른 Provider들...
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 // 앱 최상위 위젯

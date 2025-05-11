@@ -1,9 +1,15 @@
+// lib/category_question_screen.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'models/incorrect_question_info.dart'; // 필요
-import 'models/question.dart';                // 수정된 Question 모델 import
-import 'services/incorrect_note_service.dart'; // 필요
+import 'package:provider/provider.dart'; // Provider 패키지 import
+
+// 프로젝트 내부 파일 import
+import 'models/question.dart';
+import 'models/incorrect_question_info.dart';
+import 'models/study_context.dart'; // StudyContextType enum
+import 'notifiers/recent_study_notifier.dart'; // Notifier import
+import 'services/incorrect_note_service.dart';
 import 'widgets/question_viewer.dart';
 
 class CategoryQuestionScreen extends StatefulWidget {
@@ -35,7 +41,39 @@ class _CategoryQuestionScreenState extends State<CategoryQuestionScreen> {
     super.initState();
     _loadCategoryQuestionData(); // 데이터 로딩 시작
   }
+  @override
+  void dispose() {
+    if (mounted) {
+      _updateRecentStudyForCurrentCategoryQuestion(isDisposing: true);
+    }
+    super.dispose();
+  }
 
+  Future<void> _updateRecentStudyForCurrentCategoryQuestion({bool isDisposing = false}) async {
+    if (!mounted || _isLoading || _loadingError.isNotEmpty || _categoryQuestions.isEmpty || _currentIndex < 0 || _currentIndex >= _categoryQuestions.length) {
+      if (isDisposing) print("CategoryQuestionScreen: dispose 중 최근 학습 업데이트 건너뜀 (상태 유효하지 않음)");
+      else print("CategoryQuestionScreen: 최근 학습 업데이트 건너뜀 (상태 유효하지 않음)");
+      return;
+    }
+    final Question currentQuestion = _categoryQuestions[_currentIndex];
+    final recentStudyNotifier = Provider.of<RecentStudyNotifier>(context, listen: false);
+
+    int originalIndexToSave = currentQuestion.originalIndex ?? _currentIndex;
+    print("CategoryQuestionScreen: _updateRecentStudyForCurrentCategoryQuestion 호출됨 - Q#${currentQuestion.number}, originalIndex: $originalIndexToSave");
+
+    if (currentQuestion.year != null && currentQuestion.sessionNumber != null) {
+      // ★★★ originalIndex 전달 ★★★
+      await recentStudyNotifier.updateRecentCategoryExam(
+          widget.categoryName,
+          currentQuestion.year!,
+          currentQuestion.sessionNumber!,
+          currentQuestion.number,
+          originalIndexToSave
+      );
+    } else {
+      print("CategoryQuestionScreen 경고: 최근 학습 저장 시 Question 객체에 year 또는 sessionNumber 정보가 없습니다.");
+    }
+  }
   // --- 데이터 로딩 함수 ---
   Future<void> _loadCategoryQuestionData() async {
     if (!mounted) return;
@@ -43,35 +81,31 @@ class _CategoryQuestionScreenState extends State<CategoryQuestionScreen> {
 
     List<Question> allQuestions = [];
     final List<int> years = List.generate(2024 - 2003 + 1, (index) => 2024 - index);
-    final List<int> sessions = [1, 2, 3];
+    final List<int> sessions = [1, 2, 3, 4]; // 2020년 4회차 포함 가정 (필요시 조정)
 
     for (int year in years) {
-      List<int> currentYearSessions = List.from(sessions);
-      if (year == 2020) { currentYearSessions.add(4); }
-
+      List<int> currentYearSessions = (year == 2020) ? [1, 2, 3, 4] : [1, 2, 3];
       for (int session in currentYearSessions) {
         final String filePath = 'assets/data/${year}_$session.json';
         try {
-          print("Attempting to load: $filePath");
           final String jsonString = await rootBundle.loadString(filePath);
           final Map<String, dynamic> jsonData = jsonDecode(jsonString) as Map<String, dynamic>;
           final List<dynamic> questionListJson = jsonData['questions'] as List<dynamic>? ?? [];
 
-          for (int i = 0; i < questionListJson.length; i++) {
+          for (int i = 0; i < questionListJson.length; i++) { // questionListJson 루프 내에서 인덱스 사용
             final qJson = questionListJson[i];
             if (qJson is Map<String, dynamic>) {
               final Question originalQ = Question.fromJson(qJson);
-              // ★★★ 로드 시점에 컨텍스트 정보 추가 (copyWithContext 사용) ★★★
               allQuestions.add(originalQ.copyWithContext(
-                year: year,
-                sessionNumber: session,
-                originalIndex: i, // JSON 파일 내에서의 원래 인덱스
+                year: year, // 현재 읽고 있는 파일의 연도
+                sessionNumber: session, // 현재 읽고 있는 파일의 회차
+                originalIndex: i, // 현재 파일 내에서의 인덱스
               ));
             }
           }
-          print("Loaded and processed: $filePath");
         } catch (e) {
-          print("Could not load or parse $filePath: $e");
+          // 파일 로드 오류는 개발 중에는 print, 배포 시에는 무시 또는 로깅
+          print("CategoryQuestionScreen: $filePath 로드/파싱 오류 - $e");
         }
       }
     }
@@ -91,16 +125,20 @@ class _CategoryQuestionScreenState extends State<CategoryQuestionScreen> {
           _loadingError = "'${widget.categoryName}' 유형의 문제를 찾을 수 없습니다.";
         }
       });
+      await _updateRecentStudyForCurrentCategoryQuestion();
     }
   }
   // --- 문제 이동 함수 (카테고리 내에서) ---
-  void _goToQuestion(int newIndex) {
+  void _goToQuestion(int newIndex) async { // async 추가
     if (!mounted || newIndex < 0 || newIndex >= _totalQuestionsInCategory) return;
-    print("CategoryScreen: Navigating to index $newIndex");
-    setState(() {
+    print("CategoryQuestionScreen: Navigating to index $newIndex");
+
+    setState(() { // 먼저 UI 상태 업데이트
       _currentIndex = newIndex;
-      _assessmentStatus = null; // 문제 이동 시 평가 상태 초기화
+      _assessmentStatus = null;
     });
+    // ★ 다음 문제로 이동 후, "최근 학습" 정보 업데이트
+    await _updateRecentStudyForCurrentCategoryQuestion();
   }
   // --- 빌드 메소드 ---
   @override
@@ -157,21 +195,20 @@ class _CategoryQuestionScreenState extends State<CategoryQuestionScreen> {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
               '${currentQuestion.year ?? '?'}년 ${currentQuestion.sessionNumber ?? '?'}회차 ${currentQuestion.number}번',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey.shade700,
-              ),
+              style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
             child: QuestionViewer(
-              key: ValueKey(_currentIndex), // 인덱스 변경 시 위젯 재생성
-              question: currentQuestion,    // 현재 문제 객체 전달
+              key: ValueKey(currentQuestion.hashCode), // 문제 객체 변경 시 위젯 갱신
+              question: currentQuestion,
+              contextType: StudyContextType.categoryExam,
+              categoryName: widget.categoryName,
+              // displayYear, displaySessionNumber는 QuestionViewer 내부에서 question.year/sessionNumber를 사용
             ),
           ),
-            // ----------------------------------------------------
-          ],
+        ],
       ),
       // -----------------------------------------
       persistentFooterButtons: [

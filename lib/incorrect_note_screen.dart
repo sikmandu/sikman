@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'models/incorrect_question_info.dart'; // Model import 확인
 import 'incorrect_note_review_screen.dart'; // 복습 화면 import 확인
 import 'services/incorrect_note_service.dart'; // 경로 주의!
+import 'package:shared_preferences/shared_preferences.dart'; // Import 추가
+import 'dart:convert'; // jsonDecode 사용
+import 'widgets/common_app_bar.dart'; // ★★★ 공통 AppBar import ★★★
+import 'widgets/recent_activity_tile.dart';
+import 'services/recent_study_service.dart'; // ★ 추가: 최근 학습 서비스
+
+const String prefKeyRecentIncorrectNote = 'recent_incorrect_note_v1';
 
 class IncorrectNoteScreen extends StatefulWidget {
   const IncorrectNoteScreen({super.key});
@@ -19,45 +26,96 @@ class _IncorrectNoteScreenState extends State<IncorrectNoteScreen> {
   bool _isSelectionMode = false;
   Set<IncorrectQuestionInfo> _selectedNotes = {}; // 선택된 노트들을 저장 (Set 사용)
 
+  final RecentStudyService _recentStudyService = RecentStudyService();
+  Map<String, dynamic>? _lastViewedIncorrectNoteDetail; // 로드된 오답노트 최근 학습 정보
+
   @override
   void initState() {
     super.initState();
-    _fetchAndPrepareNotes(); // 데이터 로드 및 준비 함수 호출
+    _fetchAndPrepareAllNotesData(); // 오답 목록과 최근 학습 정보 모두 로드
   }
 
-  // 노트를 저장소에서 불러오는 비동기 함수
-  Future<void> _fetchAndPrepareNotes() async {
+
+  Future<void> _fetchAndPrepareAllNotesData() async {
     if (!mounted) return;
     setState(() { _isLoading = true; });
 
+    // 1. 오답 목록 로드 및 그룹화 (기존 로직)
     _notes = await _noteService.loadIncorrectNotes();
+    // questionNumber 기준으로 정렬 (또는 year, session, questionNumber 순)
     _notes.sort((a, b) {
-      // 1. 유형(Type) 기준으로 오름차순 정렬
-      int typeCompare = a.questionType.compareTo(b.questionType);
-      if (typeCompare != 0) return typeCompare;
-      // 2. 연도(Year) 기준으로 내림차순 정렬
-      int yearCompare = b.year.compareTo(a.year);
+      int yearCompare = a.year.compareTo(b.year);
       if (yearCompare != 0) return yearCompare;
-      // 3. 회차(Session) 기준으로 오름차순 정렬
       int sessionCompare = a.sessionNumber.compareTo(b.sessionNumber);
       if (sessionCompare != 0) return sessionCompare;
-      // 4. 문제 인덱스(Index) 기준으로 오름차순 정렬
-      return a.questionIndex.compareTo(b.questionIndex);
+      return a.questionNumber.compareTo(b.questionNumber);
     });
     _displayItems = [];
     String? currentType;
     for (var note in _notes) {
       if (note.questionType != currentType) {
         currentType = note.questionType;
-        _displayItems.add(currentType); // 유형 헤더 추가 (문자열)
+        _displayItems.add(currentType);
       }
-      _displayItems.add(note); // 오답 노트 정보 추가 (객체)
-    }// 저장된 노트 로드
+      _displayItems.add(note);
+    }
+
+    // ★★★ 2. 오답노트 전용 "최근 학습" 정보 로드 ★★★
+    final data = await _recentStudyService.loadLastViewedIncorrectNoteDetail();
     if (mounted) {
-      setState(() { _isLoading = false; }); // 로딩 완료
+      setState(() {
+        _lastViewedIncorrectNoteDetail = data;
+        _isLoading = false;
+      });
+      if (data != null) {
+        print("IncorrectNoteScreen: 로드된 최근 오답 정보: ${data.toString()}");
+      } else {
+        print("IncorrectNoteScreen: 로드된 최근 오답 정보 없음.");
+      }
     }
   }
+  void _navigateToRecentIncorrectNoteReview() {
+    if (_lastViewedIncorrectNoteDetail != null) {
+      final year = _lastViewedIncorrectNoteDetail!['year'] as int?;
+      final session = _lastViewedIncorrectNoteDetail!['session'] as int?;
+      final qNum = _lastViewedIncorrectNoteDetail!['q_num'] as int?;
+      // final category = _lastViewedIncorrectNoteDetail!['category'] as String?; // 필요시 사용
+      // final originalJsonIndex = _lastViewedIncorrectNoteDetail!['originalJsonIndex'] as int?; // 필요시 사용
 
+      if (year != null && session != null && qNum != null) {
+        // 오답 목록(_notes)에서 해당 문제의 인덱스(오답 목록 내에서의 순번)를 찾아야 함
+        int reviewScreenInitialIndex = _notes.indexWhere((note) =>
+        note.year == year &&
+            note.sessionNumber == session &&
+            note.questionNumber == qNum); // 타입도 비교하려면 note.questionType == category 추가
+
+        if (reviewScreenInitialIndex != -1) {
+          print('IncorrectNoteScreen: 최근 학습 오답 이동 - Y:$year, S:$session, QN:$qNum (리뷰 화면 인덱스: $reviewScreenInitialIndex)');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => IncorrectNoteReviewScreen(
+                incorrectNotes: List.from(_notes), // 현재 오답 목록 전체 전달
+                initialIndex: reviewScreenInitialIndex, // 오답 목록에서의 인덱스
+              ),
+            ),
+          ).then((dataChanged) { // IncorrectNoteReviewScreen에서 돌아왔을 때
+            print("IncorrectNoteScreen: IncorrectNoteReviewScreen에서 돌아옴. 데이터 갱신 시도.");
+            _fetchAndPrepareAllNotesData(); // 오답 목록 및 최근 학습 정보 다시 로드
+            // dataChanged가 true이면 (예: 삭제됨) 추가적인 UI 피드백 가능
+          });
+        } else {
+          print('IncorrectNoteScreen: 최근 학습 오답 정보를 현재 오답 목록에서 찾을 수 없습니다. 정보: $_lastViewedIncorrectNoteDetail');
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('최근에 본 오답이 현재 목록에 없거나 정보가 정확하지 않습니다.')));
+        }
+      } else {
+        print('IncorrectNoteScreen: 최근 학습 오답 정보의 일부 필드가 null입니다.');
+      }
+    } else {
+      print('IncorrectNoteScreen: 최근 학습 오답 정보 자체가 null입니다.');
+    }
+  }
   // 목록 화면에서 직접 노트를 삭제하고 저장하는 함수
   // --- 노트 삭제 함수 ---
   Future<void> _removeIncorrectNote(IncorrectQuestionInfo noteToRemove) async {
@@ -69,7 +127,7 @@ class _IncorrectNoteScreenState extends State<IncorrectNoteScreen> {
 
     if (currentNotes.length < initialLength) { // 삭제가 실제로 일어났는지 확인
       await _noteService.saveIncorrectNotes(currentNotes); // 변경된 목록 저장
-      await _fetchAndPrepareNotes(); // ★★★ 목록 다시 로드 및 그룹화 (내부에 setState 포함) ★★★
+      await _fetchAndPrepareAllNotesData(); // ★★★ 목록 다시 로드 및 그룹화 (내부에 setState 포함) ★★★
 
       // ★★★ 추가: UI 갱신을 확실히 하기 위해 setState 한 번 더 호출 ★★★
       if (mounted) {
@@ -90,7 +148,7 @@ class _IncorrectNoteScreenState extends State<IncorrectNoteScreen> {
         );
       }
       // 삭제할 노트가 없어도 목록은 한번 갱신
-      await _fetchAndPrepareNotes();
+      await _fetchAndPrepareAllNotesData();
       if (mounted) {
         setState(() {});
       }
@@ -135,7 +193,7 @@ class _IncorrectNoteScreenState extends State<IncorrectNoteScreen> {
         _selectedNotes.clear();
         _isLoading = true; // 로딩 표시기 잠시 보여주기
       });
-      await _fetchAndPrepareNotes(); // 목록 새로고침
+      await _fetchAndPrepareAllNotesData(); // 목록 새로고침
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -165,72 +223,61 @@ class _IncorrectNoteScreenState extends State<IncorrectNoteScreen> {
   // ----------------------------------------------------------
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // --- ★★★ AppBar 동적 변경 ★★★ ---
-        title: Text(
-            _isSelectionMode ? '${_selectedNotes.length}개 선택됨' : '오답 노트 (${_notes.length}개)'
-        ), // _notes.length 사용
-    actions: _isSelectionMode
-    ? [ // 선택 모드일 때의 버튼들
-    // 전체 선택 버튼 (선택적)
-    IconButton(
-    icon: Icon(
-    _selectedNotes.length == _notes.length && _notes.isNotEmpty
-    ? Icons.deselect
-        : Icons.select_all
-    ),
-    tooltip: '전체 선택/해제',
-    onPressed: _notes.isEmpty ? null : _toggleSelectAll, // 노트 없으면 비활성화
-    ),
-    // 선택 항목 삭제 버튼
-    IconButton(
-    icon: const Icon(Icons.delete_sweep_outlined),
-    tooltip: '선택 삭제',
-    onPressed: _selectedNotes.isEmpty ? null : _deleteSelectedNotes, // 선택된게 없으면 비활성화
-    ),
-    // 취소 버튼
-    IconButton(
-    icon: const Icon(Icons.close),
-    tooltip: '취소',
-    onPressed: () {
-    setState(() {
-    _isSelectionMode = false;
-    _selectedNotes.clear();
-    });
-    },
-    ),
+    // --- 선택 모드에 따른 기존 actions 버튼 목록 ---
+    List<Widget> currentActions = _isSelectionMode
+        ? [ /* 선택 모드 버튼들 (전체선택, 선택삭제, 취소) */
+      IconButton(icon: Icon(_selectedNotes.length == _notes.length && _notes.isNotEmpty ? Icons.deselect : Icons.select_all), tooltip: '전체 선택/해제', onPressed: _notes.isEmpty ? null : _toggleSelectAll,),
+      IconButton(icon: const Icon(Icons.delete_sweep_outlined), tooltip: '선택 삭제', onPressed: _selectedNotes.isEmpty ? null : _deleteSelectedNotes,),
+      IconButton(icon: const Icon(Icons.close), tooltip: '취소', onPressed: () { setState(() { _isSelectionMode = false; _selectedNotes.clear(); }); },),
     ]
-        : [ // 일반 모드일 때의 버튼들
-    // 새로고침 버튼 (기존 유지)
-    IconButton(
-    icon: const Icon(Icons.refresh),
-    tooltip: '새로고침',
-    onPressed: _fetchAndPrepareNotes,
-    ),
-    // 선택 모드 진입 버튼
-    TextButton(
-    child: const Text('선택', style: TextStyle(color: Colors.white)),
-    onPressed: () {
-    setState(() {
-    _isSelectionMode = true;
-    _selectedNotes.clear(); // 선택 모드 진입 시 선택 초기화
-    });
-    },
-    ),
-    ],
+        : [ /* 일반 모드 버튼들 (새로고침, 선택) */
+      IconButton(icon: const Icon(Icons.refresh), tooltip: '새로고침', onPressed: _fetchAndPrepareAllNotesData,),
+      TextButton(child: const Text('선택', style: TextStyle(color: Colors.white)), onPressed: () { setState(() { _isSelectionMode = true; _selectedNotes.clear(); }); },),
+    ];
+    return Scaffold(
+      // --- ★★★ AppBar 수정: 'actions' -> 'otherActions' ★★★ ---
+      appBar: buildCommonAppBar(
+        context: context, // context 전달
+        title: _isSelectionMode ? '${_selectedNotes.length}개 선택됨' : '오답 노트 (${_notes.length}개)',
+        otherActions: currentActions, // ★★★ 파라미터 이름을 otherActions로 변경 ★★★
       ),
-      body: _isLoading // 로딩 상태 표시
+      body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : _notes.isEmpty // 로딩 완료 후 목록 상태에 따라 표시
-          ? const Center( child: Text( '오답 노트가 비어있습니다...', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, color: Colors.grey), ), )
-          : ListView.builder(
-        itemCount: _displayItems.length, // 그룹화된 목록 개수 사용
-        itemBuilder: (context, index) {
-          final item = _displayItems[index];
-
-          // --- 아이템 타입에 따라 위젯 분기 ---
-          if (item is String) {
+          : _notes.isEmpty
+          ? const Center(child: Text('오답 노트가 비어있습니다...', /* ... */))
+          : Column( // ★★★ Column으로 감싸서 최근 학습 정보 표시 공간 마련 ★★★
+        children: [
+          // ★★★ 오답노트의 "최근 학습" 정보 표시 ★★★
+          if (_lastViewedIncorrectNoteDetail != null &&
+              _lastViewedIncorrectNoteDetail!['year'] != null &&
+              _lastViewedIncorrectNoteDetail!['session'] != null &&
+              _lastViewedIncorrectNoteDetail!['q_num'] != null &&
+              _lastViewedIncorrectNoteDetail!['category'] != null ) // category도 확인
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+              child: Card(
+                elevation: 2,
+                color: Colors.orange.shade50, // 오답노트용 색상
+                child: ListTile(
+                  leading: Icon(Icons.lightbulb_outline, color: Colors.orange.shade700, size: 28),
+                  title: Text(
+                    '최근 본 오답: ${_lastViewedIncorrectNoteDetail!['year']}년 ${_lastViewedIncorrectNoteDetail!['session']}회차 ${_lastViewedIncorrectNoteDetail!['q_num']}번 (${_lastViewedIncorrectNoteDetail!['category']})',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.orange.shade900),
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 18),
+                  onTap: _navigateToRecentIncorrectNoteReview, // ★★★ 클릭 시 이동 함수 호출 ★★★
+                ),
+              ),
+            ),
+          if (_notes.isEmpty && _lastViewedIncorrectNoteDetail != null) // 최근 학습만 있고 오답 목록은 빌 경우
+            const Expanded(child: Center(child: Text("오답 노트 목록은 비어있습니다."))),
+          if (_notes.isNotEmpty) // 오답 목록이 있을 경우에만 ListView 표시
+          Expanded(
+            child: ListView.builder(
+              itemCount: _displayItems.length,
+              itemBuilder: (context, index) {
+                final item = _displayItems[index];
+                if (item is String) {
             // 유형 헤더 표시 (기존 유지 - 이미 가운데 정렬됨)
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -264,13 +311,8 @@ class _IncorrectNoteScreenState extends State<IncorrectNoteScreen> {
           )
               : null, // 일반 모드에서는 leading 없음
           title: Center( // 제목 가운데 정렬
-          child: Text(
-          '${note.year}년 ${note.sessionNumber}회차 - ${note.questionNumber}번 문제',
+            child: Text('${note.year}년 ${note.sessionNumber}회차 - ${note.questionNumber}번 문제 (${note.questionType})'), // 유형 함께 표시
           ),
-          ),
-          subtitle: null, // 부제목 제거됨
-          // 선택 모드일 때는 개별 삭제 버튼 숨김
-                  trailing: null,
                   onTap: () {
                     if (_isSelectionMode) {
                       // 선택 모드에서는 탭으로 선택/해제
@@ -281,27 +323,46 @@ class _IncorrectNoteScreenState extends State<IncorrectNoteScreen> {
                           _selectedNotes.add(note);
                         }
                       });
-                    } else {
-                      // 일반 모드에서는 복습 화면으로 이동 (기존 로직)
-                      int originalIndex = _notes.indexWhere((n) => n == note);
-                      if (originalIndex != -1) { Navigator.push( context, MaterialPageRoute( builder: (context) => IncorrectNoteReviewScreen(
-                        // 전체 오답 목록(_notes)과 해당 노트의 인덱스를 전달
-                        incorrectNotes: List.from(_notes),
-                        initialIndex: originalIndex, // _notes에서의 인덱스
-                      ),),).then((_) { _fetchAndPrepareNotes(); });
-                      } else { print("Error: Could not find original index."); }
+                    }else {
+                      // 오답노트 목록에서 항목 클릭 시 IncorrectNoteReviewScreen으로 이동
+                      // ★★★ _notes에서 현재 note의 실제 인덱스를 찾아 전달 ★★★
+                      int originalListIndex = _notes.indexWhere((n) =>
+                      n.year == note.year &&
+                          n.sessionNumber == note.sessionNumber &&
+                          n.questionNumber == note.questionNumber &&
+                          n.questionType == note.questionType);
+
+                      if (originalListIndex != -1) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => IncorrectNoteReviewScreen(
+                              incorrectNotes: List.from(_notes), // 오염 방지를 위해 복사본 전달
+                              initialIndex: originalListIndex, // _notes 리스트에서의 실제 인덱스
+                            ),
+                          ),
+                        ).then((value) { // ★ IncorrectNoteReviewScreen에서 돌아왔을 때
+                          print("IncorrectNoteScreen: IncorrectNoteReviewScreen에서 돌아옴. 데이터 갱신.");
+                          _fetchAndPrepareAllNotesData(); // 오답 목록 및 최근 학습 정보 다시 로드
+                          if (value == true) { // 만약 삭제 등의 변경이 있었다면
+                            // 추가적인 UI 처리 가능
+                          }
+                        });
+                      } else {
+                        print("IncorrectNoteScreen: 클릭된 오답노트 항목의 인덱스를 찾을 수 없음");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('선택한 오답 정보를 찾을 수 없습니다.')));
+                      } 
                     }
                   },
-                  // 선택 상태 시각적 표시 (ListTile 자체 속성)
-                  // selected: isSelected,
-                  // selectedTileColor: Colors.blue.shade50, // Container로 대체됨
                 ),
             );
-            // --------------------------------------------
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

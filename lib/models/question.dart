@@ -1,6 +1,7 @@
 
 // 소문제 정보를 담는 클래스
 
+
 class SubQuestion {
   final String subNumber;
   final String questionText;
